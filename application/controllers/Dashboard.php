@@ -91,7 +91,7 @@ class Dashboard extends CI_Controller
 					$acc = 2;break;
 				case 7:	//cuti
 					$acc = 4;break;
-				case 8:	//ijin
+				case 8:	//unpaid leave
 					$acc = 5;break;
 				case 9:	//sakit
 					$acc = 6;break;

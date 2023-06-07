@@ -87,18 +87,22 @@ class Laporan extends CI_Controller
 	{
 
 		$table = '<div style="width:100%;text-align: center;font-weight: bold;">REKAP ABSENSI KARYAWAN PT. FALCON PRIMA TEHNIK<br>BULAN ' . $b2 . ' ' . date('Y') . ' <br></div><br><center><table border="2">';
+		$table2 = '<table border="2">';
 		//$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td>1-' . $b . '</td><td>2-' . $b . '</td><td>3-' . $b . '</td><td>4-' . $b . '</td><td>5-' . $b . '</td><td>6-' . $b . '</td><td>7-' . $b . '</td><td>8-' . $b . '</td><td>9-' . $b . '</td><td>10-' . $b . '</td><td>11-' . $b . '</td><td>12-' . $b . '</td><td>13-' . $b . '</td><td>14-' . $b . '</td><td>15-' . $b . '</td><td>16-' . $b . '</td><td>17-' . $b . '</td><td>18-' . $b . '</td><td>19-' . $b . '</td><td>20-' . $b . '</td><td>21-' . $b . '</td><td>22-' . $b . '</td><td>23-' . $b . '</td><td>24-' . $b . '</td><td>25-' . $b . '</td><td>26-' . $b . '</td><td>27-' . $b . '</td><td>28-' . $b . '</td></tr>';
 		//$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;">1</td><td style="width:30px;text-align: center;">2</td><td style="width:30px;text-align: center;">3</td><td style="width:30px;text-align: center;">4</td><td style="width:30px;text-align: center;">5</td><td style="width:30px;text-align: center;">6</td><td style="width:30px;text-align: center;">7</td><td style="width:30px;text-align: center;">8</td><td style="width:30px;text-align: center;">9</td><td style="width:30px;text-align: center;">10</td><td style="width:30px;text-align: center;">11</td><td style="width:30px;text-align: center;">12</td><td style="width:30px;text-align: center;">13</td><td style="width:30px;text-align: center;">14</td><td style="width:30px;text-align: center;">15</td><td style="width:30px;text-align: center;">16</td><td style="width:30px;text-align: center;">17</td><td style="width:30px;text-align: center;">18</td><td style="width:30px;text-align: center;">19</td><td style="width:30px;text-align: center;">20</td><td style="width:30px;text-align: center;">21</td><td style="width:30px;text-align: center;">22</td><td style="width:30px;text-align: center;">23</td><td style="width:30px;text-align: center;">24</td><td style="width:30px;text-align: center;">25</td><td style="width:30px;text-align: center;">26</td><td style="width:30px;text-align: center;">27</td><td style="width:30px;text-align: center;">28</td></tr>';
 
 		//create tabel header tanggal
 		$x = 1;
 		$th = '';
+		
+		
 		//header tabel
 		for ($n = 1; $n <= $d; $n++) {
 			$th .= '<td style="width:30px;text-align: center;">' . $n . '</td>';
 		}
 
 		$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
+		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td></tr>';
 
 		if (strlen($nbln) == 1) {
 			$nbln = '0' . $nbln;
@@ -110,6 +114,8 @@ class Laporan extends CI_Controller
 
 		foreach ($user as $u) {
 			$td = '';
+			$m = $tk = $c = $s = $ul = $lbr = 0;
+			$n_efektif = 0;
 
 			$this->db->where('id_user', $u->id_akun);
 			$this->db->where('pending <> 1');
@@ -141,25 +147,33 @@ class Laporan extends CI_Controller
 				if ($n_data > 0) {
 					if (($p == 0) or ($p == 2)) {
 						$td .= '<td style="background-color: green;width:30px;text-align: center;">M</td>';
+						$m += 1;
 					} elseif ($p == 4) {
 						$td .= '<td style="background-color: gray;width:30px;text-align: center;">C</td>';
+						$c += 1;
 					} elseif ($p == 5) {	//ULeave
 						$td .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td>';
+						$ul += 1;
 					} elseif ($p == 6) {
 						$td .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td>';
+						$s += 1;
 					}
+					$n_efektif += 1;
 				} elseif (date('D', strtotime($ny . '-' . $nbln . '-' . $n)) == 'Sun') {
 					$td .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td>';
 				} elseif ($this->cek_libur($ny . '-' . $nbln . '-' . $n) >= 1) {
 					$td .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td>';
 				}else {
 					$td .= '<td style="background-color: red;width:30px;text-align: center;">TK</td>';
+					$tk += 1;
+					$n_efektif += 1;
 				}
 			}
 			//echo date('D', strtotime($ny . '-' . $nbln . '-28'));
 
 			//$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align: center;"><b><center>' . strval($x + 1) . '</center></b></td><td style="background-color: green;">' . strval($x + 10) . '</td><td style="background-color: red;">5</td><td style="background-color: yellow;">6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 			$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td . '</tr>';
+			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;">' . $n_efektif . '</td></tr>';
 			$x += 1;
 		}
 
@@ -171,7 +185,8 @@ class Laporan extends CI_Controller
 		$table .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td><td>:</td><td>Sakit</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td><td>:</td><td>Unpaid Leave</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">LBR</td><td>:</td><td>Lembur</td><td>&emsp;</td>';
-		$table .= '</tr></table></center>';
+		$table .= '</tr></table><br><br>';
+		$table = $table . $table2 . '</table></center>';
 		echo $table;
 	}
 
