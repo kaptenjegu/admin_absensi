@@ -23,6 +23,7 @@ class Dashboard extends CI_Controller
 		$this->db->where('fai_absen.pending', '7');
 		$this->db->or_where('fai_absen.pending', '8');
 		$this->db->or_where('fai_absen.pending', '9');
+		$this->db->or_where('fai_absen.pending', '1');
 		$data['dashboard'] = $this->db->get()->result();
 
 		$this->db->where('tgl_delete', null);	
@@ -86,6 +87,8 @@ class Dashboard extends CI_Controller
 			$this->db->trans_start();
 
 			switch($id_pending){
+				case 1:	//lupa absen
+					$acc = 2;break;
 				case 7:	//cuti
 					$acc = 4;break;
 				case 8:	//ijin

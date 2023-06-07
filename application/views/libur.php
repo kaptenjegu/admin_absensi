@@ -33,8 +33,8 @@
                             foreach ($libur as $v) {
                                 echo '<tr><td>' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_libur)) . '</td><td>' . $v->keterangan . '</td>
                                     <td><button class="btn btn-warning" data-toggle="modal" onclick="get_data(\'' . $v->id_libur . '\')">Detail</button></td></tr>';
+                                $no += 1;
                             }
-                            $no += 1;
                             ?>
 
                         </tbody>
