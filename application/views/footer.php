@@ -120,6 +120,7 @@
                 dataType: "JSON",
                 success: function(data) {
                     document.getElementById('id_absen').value = data['id_absen'];
+                    document.getElementById('id_user').value = data['id_user'];
                     document.getElementById('pending').value = data['pending'];
                     document.getElementById('nama_user').value = data['nama_user'];
                     document.getElementById('nama_jabatan').value = data['nama_jabatan'];

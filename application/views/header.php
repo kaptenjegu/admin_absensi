@@ -69,9 +69,9 @@
                     <li>
                         <a href="<?= base_url("Tempat") ?>" <?php if($page == "Tempat"){ echo 'class="active-menu"';} ?>><i class="fa fa-globe"></i> Tempat Kerja</a>
                     </li>
-                    <li>
-                        <a href="<?= base_url("Pengumuman") ?>" <?php if($page == "Pengumuman"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Pengumuman</a>
-                    </li>
+                    <!--li>
+                        <a href="<?//= base_url("Pengumuman") ?>" <?php //if($page == "Pengumuman"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Pengumuman</a>
+                    </li-->
                     <li>
                         <a href="<?= base_url("Libur") ?>" <?php if($page == "Libur"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Hari Libur</a>
                     </li>

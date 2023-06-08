@@ -9,8 +9,9 @@
 
 <!-- /. ROW  -->
 <div class="row">
-
+<?= $this->session->flashdata('msg') ?>
     <div class="col-md-6 col-sm-12 col-xs-12">
+    
         <div class="panel panel-default">
             <div class="panel-heading">
                 Absen Hari ini <?php //echo strtotime('d-m-Y', date(now)); 
@@ -90,6 +91,7 @@
             <div class="modal-body">
                 <input type="hidden" name="id_absen" id="id_absen">
                 <input type="hidden" name="pending" id="pending">
+                <input type="hidden" name="id_user" id="id_user">
                 <div class="form-group">
                     <label>Nama</label>
                     <input type="text" class="form-control" id="nama_user" readonly>
@@ -100,7 +102,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tanggal Absen</label>
-                    <input type="text" class="form-control" id="tgl_absen" readonly>
+                    <input type="text" class="form-control" name="tgl_absen" id="tgl_absen" readonly>
                 </div>
                 <div class="form-group">
                     <label>Absen Masuk</label>
@@ -124,6 +126,10 @@
                         <option value="1">disetujui</option>
                         <option value="2">ditolak</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Alasan ditolak</label>
+                    <input type="text" class="form-control" name="alasan">
                 </div>
             </div>
             <div class="modal-footer">

@@ -26,20 +26,20 @@ class Dashboard extends CI_Controller
 		$this->db->or_where('fai_absen.pending', '1');
 		$data['dashboard'] = $this->db->get()->result();
 
-		$this->db->where('tgl_delete', null);	
+		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun')->num_rows();
 
-		$this->db->where('pending >= 4');	
-		$this->db->where('pending <= 6');	
-		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));	
+		$this->db->where('pending >= 4');
+		$this->db->where('pending <= 6');
+		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$off = $this->db->get('fai_absen')->num_rows();
 
-		$this->db->where('pending', 0);	
-		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));	
+		$this->db->where('pending', 0);
+		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$masuk = $this->db->get('fai_absen')->num_rows();
 
 		$tdk_masuk = $user - $masuk;
-		$data['chart'] = array('user' => $user, 'masuk' => $masuk, 'tdk_masuk' => $tdk_masuk, 'off' => $off );
+		$data['chart'] = array('user' => $user, 'masuk' => $masuk, 'tdk_masuk' => $tdk_masuk, 'off' => $off);
 
 		$this->load->view('header', $data);
 		$this->load->view('dashboard', $data);
@@ -59,53 +59,69 @@ class Dashboard extends CI_Controller
 	}
 
 	public function get_data_chart()
-	{		
-		$this->db->where('tgl_delete', null);	
+	{
+		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun')->num_rows();
 
-		$this->db->where('pending >= 4');	
-		$this->db->where('pending <= 6');	
-		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));	
+		$this->db->where('pending >= 4');
+		$this->db->where('pending <= 6');
+		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$off = $this->db->get('fai_absen')->num_rows();
 
-		$this->db->where('pending', 0);	
-		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));	
+		$this->db->where('pending', 0);
+		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$masuk = $this->db->get('fai_absen')->num_rows();
 
 		$tdk_masuk = $user - $masuk;
-		$data = array('user' => $user, 'masuk' => $masuk, 'tdk_masuk' => $tdk_masuk, 'off' => $off );
+		$data = array('user' => $user, 'masuk' => $masuk, 'tdk_masuk' => $tdk_masuk, 'off' => $off);
 		echo json_encode($data);
 	}
 
 	public function simpan_pengajuan()
 	{
-		$id_absen = $this->db->escape_str($this->input->post('id_absen'));
-		$id_pending = $this->input->post('pending');
-		$opsi = $this->input->post('opsi');
-
 		try {
+			$id_absen = $this->db->escape_str($this->input->post('id_absen'));
+			$id_pending = $this->input->post('pending');
+			$opsi = $this->input->post('opsi');
+			$alasan = $this->input->post('alasan');
+			$id_user = $this->input->post('id_user');
+			$tgl_absen = $this->input->post('tgl_absen');
 			$this->db->trans_start();
 
-			switch($id_pending){
+			switch ($id_pending) {
 				case 1:	//lupa absen
-					$acc = 2;break;
+					$acc = 2;
+					$tipe = 'Lupa Absen';
+					break;
 				case 7:	//cuti
-					$acc = 4;break;
+					$acc = 4;
+					$tipe = 'Cuti';
+					break;
 				case 8:	//unpaid leave
-					$acc = 5;break;
+					$acc = 5;
+					$tipe = 'Unpaid Leave';
+					break;
 				case 9:	//sakit
-					$acc = 6;break;
+					$acc = 6;
+					$tipe = 'Sakit';
+					break;
 			}
 
-			if($opsi == 1){
+			if ($opsi == 1) {
 				$this->db->set('pending', $acc);
 				$this->db->where('id_absen', $id_absen);
 				$this->db->update('fai_absen');
+
+				$this->notifkasi(2, 'Pengajuan Absen ' . $tipe . ' tanggal ' . $tgl_absen . ' disetujui', '', $id_user);
+
 				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data berhasil disimpan</b></center></div>');
-			}else{
+			} else {
 				$this->db->where('id_absen', $id_absen);
 				$this->db->delete('fai_absen');
+
+				$this->notifkasi(1, 'Pengajuan Absen ' . $tipe . ' tanggal ' . $tgl_absen . ' ditolak', $alasan, $id_user);
+
 				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data berhasil dihapus</b></center></div>');
 			}
@@ -116,6 +132,19 @@ class Dashboard extends CI_Controller
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
 		}
 		redirect('Dashboard');
+	}
+
+	private function notifkasi($mode, $isi, $alasan, $id_user)	//$mode - alert / success
+	{
+		$data = array(
+			'id_notif' => randid(),
+			'mode_notif' => $mode,
+			'isi_notif' => $isi,
+			'alasan' => $alasan,
+			'status_baca' => 0,
+			'id_user' => $id_user
+		);
+		$this->db->insert('fai_notif', $data);
 	}
 
 	public function time_server()
@@ -137,7 +166,7 @@ class Dashboard extends CI_Controller
 	public function masuk()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 6 AND date('H') <= 12)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 6 and date('H') <= 12)) {
 			try {
 				$this->db->trans_start();
 				$absen_masuk = date('H:i');
@@ -182,7 +211,7 @@ class Dashboard extends CI_Controller
 	public function pulang()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 14 AND date('H') <= 21)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 14 and date('H') <= 21)) {
 			try {
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
