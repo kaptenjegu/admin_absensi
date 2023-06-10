@@ -120,6 +120,14 @@ class Dashboard extends CI_Controller
 				$this->db->where('id_absen', $id_absen);
 				$this->db->delete('fai_absen');
 
+				//Pengembalian sisa cuti karena cuti dihapus/ditolak
+				$this->db->where('id_akun', $id_user);
+				$user = $this->db->get('fai_akun')->first_row();
+
+				$this->db->set('sisa_cuti', $user->sisa_cuti + 1);
+				$this->db->where('id_akun', $id_user);
+				$this->db->update('fai_akun');
+
 				$this->notifkasi(1, 'Pengajuan Absen ' . $tipe . ' tanggal ' . $tgl_absen . ' ditolak', $alasan, $id_user);
 
 				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
