@@ -31,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?= base_url() ?>"><?= $_SESSION['nama_user'] ?></a>
+                <a class="navbar-brand" href="<?= base_url() ?>">Admin</a>
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
