@@ -142,10 +142,14 @@
                 <br>
                 <br>
                 <br>
+                <b>Data Absen</b>
+                <br>
+                <br>
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover" id="dataTables-master">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Absen Masuk</th>
                                 <th>Absen Pulang</th>
@@ -154,13 +158,52 @@
                         </thead>
                         <tbody>
                             <?php
+                            $no = 1;
                             foreach ($riwayat as $v) {
                                 echo '<tr>
+                                    <td>' . $no . '</td>
                                     <td>' . date('d-m-Y', strtotime($v->tgl_absen)) . '</td>
                                     <td>' . $v->absen_masuk . '</td>
                                     <td>' . $v->absen_pulang . '</td>
                                     <td>' . $v->catatan_pending . '</td>
                                 </tr>';
+                                $no += 1;
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+                <b>Data Lembur</b>
+                <br>
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-master2">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Mulai Lembur</th>
+                                <th>Selesai Lembur</th>
+                                <th>Point</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($lembur as $v) {
+                                echo '<tr>
+                                    <td>' . $no . '</td>
+                                    <td>' . date('d-m-Y', strtotime($v->tgl_lembur)) . '</td>
+                                    <td>' . $v->mulai_lembur . '</td>
+                                    <td>' . $v->selesai_lembur . '</td>
+                                    <td>' . $v->point_lembur . '</td>
+                                    <td>' . $v->keterangan . '</td>
+                                </tr>';
+                                $no += 1;
                             }
                             ?>
                         </tbody>

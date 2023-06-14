@@ -110,6 +110,7 @@ class Laporan extends CI_Controller
 
 		//get nama user
 		$this->db->where('tgl_delete', null);
+		$this->db->where('role_pegawai', 1);
 		$user = $this->db->get('fai_akun')->result();
 
 		foreach ($user as $u) {

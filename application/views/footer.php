@@ -27,6 +27,9 @@
     $(document).ready(function() {
         $('#dataTables-master').dataTable();
     });
+    $(document).ready(function() {
+        $('#dataTables-master2').dataTable();
+    });
 </script>
 
 <?php if ($page == "Dashboard") { ?>
@@ -130,6 +133,32 @@
                     document.getElementById('status').value = data['nama_pending'];
                     document.getElementById('keterangan').value = data['catatan_pending'];
                     $('#detailForm').modal('show');
+                    console.log(data);
+                },
+                error: function(data) {
+                    alert('error')
+                    console.log(data);
+                }
+            });
+        }
+
+        function get_data_lembur(id) {
+            //console.log(id);
+            $.ajax({
+                url: "<?= base_url() ?>Dashboard/get_detail_lembur/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    document.getElementById('id_lembur').value = data['id_lembur'];
+                    document.getElementById('id_user2').value = data['id_akun'];
+                    document.getElementById('nama_user2').value = data['nama_user'];
+                    document.getElementById('nama_jabatan2').value = data['nama_jabatan'];
+                    document.getElementById('tgl_lembur').value = data['tgl_lembur2'];
+                    document.getElementById('mulai_lembur').value = data['mulai_lembur'];
+                    document.getElementById('selesai_lembur').value = data['selesai_lembur'];
+                    //document.getElementById('status_lembur').value = data['status_lembur'];
+                    document.getElementById('keterangan2').value = data['keterangan2'];
+                    $('#detailLembur').modal('show');
                     console.log(data);
                 },
                 error: function(data) {

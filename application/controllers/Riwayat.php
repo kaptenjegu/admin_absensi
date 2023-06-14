@@ -18,6 +18,7 @@ class Riwayat extends CI_Controller
 
 		$data['user'] = $this->data_user();
 		$data['riwayat'] = [];
+		$data['lembur'] = [];
 
 		$this->load->view('header', $data);
 		$this->load->view('riwayat', $data);
@@ -45,7 +46,15 @@ class Riwayat extends CI_Controller
 		$this->db->where('pending <> 1');
 		$this->db->where('pending <> 3');
 		$this->db->where("id_user", $this->db->escape_str($id_akun));
+		$this->db->order_by('tgl_absen', 'desc');
 		$data['riwayat'] = $this->db->get('fai_absen')->result();
+
+		$this->db->where("tgl_lembur >= '" . date('Y') . "-" . (int)$bulan . "-1'");
+		$this->db->where("tgl_lembur <='" . date('Y') . "-" . (int)$bulan . "-31'");
+		$this->db->where('status_lembur', 1);
+		$this->db->where("id_akun", $this->db->escape_str($id_akun));
+		$this->db->order_by('tgl_lembur', 'desc');
+		$data['lembur'] = $this->db->get('fai_lembur')->result();
 
 		$data['judul'] = 'Riwayat Absen';
 		$data['page'] = 'Riwayat';

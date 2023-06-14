@@ -26,6 +26,12 @@ class Dashboard extends CI_Controller
 		$this->db->or_where('fai_absen.pending', '1');
 		$data['dashboard'] = $this->db->get()->result();
 
+		$this->db->select('*');
+		$this->db->from('fai_lembur');
+		$this->db->join('fai_akun', 'fai_lembur.id_akun = fai_akun.id_akun');
+		$this->db->where('fai_lembur.status_lembur', '0');
+		$data['lembur'] = $this->db->get()->result();
+
 		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun')->num_rows();
 
@@ -282,5 +288,68 @@ class Dashboard extends CI_Controller
 		$this->db->where('absen_pulang <> ""');
 		$n = $this->db->get('fai_absen')->num_rows();
 		return $n;
+	}
+
+	public function simpan_lembur()
+	{
+		try {
+			$this->db->trans_start();
+
+			$id_lembur = $this->db->escape_str($this->input->post('id_lembur'));
+			$id_user = $this->db->escape_str($this->input->post('id_user'));
+
+			//echo $this->input->post('point_lembur');exit();
+
+			$this->db->set('point_lembur', $this->input->post('point_lembur'));
+			$this->db->set('status_lembur', 1);
+			$this->db->where('id_lembur', $id_lembur);
+			$this->db->where('id_akun', $id_user);
+			$this->db->update('fai_lembur');
+
+			$this->notifkasi(2, 'Pengajuan Lembur disetujui', '', $id_user);
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Lembur berhasil disetujui</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+				<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Dashboard');
+	}
+
+	public function get_detail_lembur()
+	{
+		$this->db->select("*, DATE_FORMAT(tgl_lembur,'%d/%m/%Y') AS tgl_lembur2, fai_lembur.keterangan as keterangan2");
+		$this->db->from('fai_lembur');
+		$this->db->join('fai_akun', 'fai_lembur.id_akun = fai_akun.id_akun');
+		$this->db->join('fai_jabatan', 'fai_akun.id_jabatan = fai_jabatan.id_jabatan');
+		$this->db->where('fai_lembur.id_lembur', $this->db->escape_str($this->uri->segment(3)));
+		$lembur = $this->db->get()->first_row();
+		echo json_encode($lembur);
+	}
+
+	public function hapus_lembur()
+	{
+		try {
+			$this->db->trans_start();
+
+			$id_lembur = $this->db->escape_str($this->uri->segment(3));
+
+			$this->db->where('id_lembur', $id_lembur);
+			$this->db->delete('fai_lembur');
+
+			$this->notifkasi(1, 'Pengajuan Lembur ditolak', 'Silakan kontak admin/HRD', $id_user);
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data berhasil dihapus</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+				<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Dashboard');
 	}
 }
