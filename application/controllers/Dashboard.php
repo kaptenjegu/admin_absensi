@@ -32,6 +32,7 @@ class Dashboard extends CI_Controller
 		$this->db->where('fai_lembur.status_lembur', '0');
 		$data['lembur'] = $this->db->get()->result();
 
+		$this->db->where('role_pegawai', 1);
 		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun')->num_rows();
 
@@ -40,10 +41,11 @@ class Dashboard extends CI_Controller
 		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$off = $this->db->get('fai_absen')->num_rows();
 
-		$this->db->where('pending', 0);
+		$this->db->where('(pending = 0 OR pending = 2)');
+		//$this->db->or_where('pending', '2');
 		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$masuk = $this->db->get('fai_absen')->num_rows();
-
+		
 		$tdk_masuk = $user - $masuk;
 		$data['chart'] = array('user' => $user, 'masuk' => $masuk, 'tdk_masuk' => $tdk_masuk, 'off' => $off);
 
@@ -66,6 +68,7 @@ class Dashboard extends CI_Controller
 
 	public function get_data_chart()
 	{
+		$this->db->where('role_pegawai', 1);
 		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun')->num_rows();
 
@@ -74,7 +77,9 @@ class Dashboard extends CI_Controller
 		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$off = $this->db->get('fai_absen')->num_rows();
 
-		$this->db->where('pending', 0);
+		$this->db->where('pending = 0 OR pending = 2');
+		//$this->db->or_where('pending', 2);
+		//$this->db->where('role_pegawai', 1);
 		$this->db->where('tgl_absen', date('Y-m-d', strtotime('today')));
 		$masuk = $this->db->get('fai_absen')->num_rows();
 

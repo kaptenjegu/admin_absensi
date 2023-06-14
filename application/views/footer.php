@@ -53,7 +53,7 @@
 
                     var masuk, tdk_masuk;
 
-                    $.ajax({
+                    /*$.ajax({
                         url: "<?= base_url() ?>Dashboard/get_data_chart/",
                         type: "GET",
                         dataType: "JSON",
@@ -66,7 +66,7 @@
                             alert('error')
                             console.log(data);
                         }
-                    });
+                    });*/
 
                     /* MORRIS DONUT CHART
 			----------------------------------------*/
