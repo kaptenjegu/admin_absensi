@@ -65,6 +65,10 @@
                         <label>Titik Latitude</label>
                         <input type="text" class="form-control" name="lat_lokasi" required>
                     </div>
+                    <div class="form-group">
+                        <label>Batas Toleran</label>
+                        <input type="text" class="form-control" name="batas_lokasi" placeholder="satuan meter" required>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -99,6 +103,10 @@
                     <div class="form-group">
                         <label>Titik Latitude</label>
                         <input type="text" class="form-control" name="lat_lokasi" id="lat_lokasi" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Batas Toleran</label>
+                        <input type="text" class="form-control" name="batas_lokasi" placeholder="satuan meter" id="batas_lokasi" required>
                     </div>
                 </div>
                 <div class="modal-footer">

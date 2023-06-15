@@ -204,6 +204,7 @@
                     document.getElementById('nama_lokasi').value = data['nama_lokasi'];
                     document.getElementById('long_lokasi').value = data['long_lokasi'];
                     document.getElementById('lat_lokasi').value = data['lat_lokasi'];
+                    document.getElementById('batas_lokasi').value = data['batas_lokasi'];
                     $('#editTempat').modal('show');
                     console.log(data);
                 },
