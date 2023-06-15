@@ -189,7 +189,30 @@
                 }
             });
         }
-        //setInterval(showTime, 900);
+    </script>
+<?php } ?>
+
+<?php if ($page == "Tempat") { ?>
+    <script type="text/javascript">
+        function get_lokasi(id) {
+            $.ajax({
+                url: "<?= base_url() ?>Tempat/get_data/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    document.getElementById('id_lokasi').value = data['id_lokasi'];
+                    document.getElementById('nama_lokasi').value = data['nama_lokasi'];
+                    document.getElementById('long_lokasi').value = data['long_lokasi'];
+                    document.getElementById('lat_lokasi').value = data['lat_lokasi'];
+                    $('#editTempat').modal('show');
+                    console.log(data);
+                },
+                error: function(data) {
+                    alert('error')
+                    console.log(data);
+                }
+            });
+        }
     </script>
 <?php } ?>
 
