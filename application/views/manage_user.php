@@ -27,7 +27,7 @@
                         <label>Email</label>
                         <input type="text" class="form-control" name="email" <?php if (isset($user)) {
                                                                                     echo 'value="' . $user->email . '"';
-                                                                                } ?> required>
+                                                                                } ?> readonly>
                     </div>
                     <div class="form-group">
                         <label>Jabatan</label>
@@ -42,6 +42,24 @@
                                     }
                                 }
                                 echo '<option value="' . $v->id_jabatan . '" ' . $s . '>' . $v->nama_jabatan . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasi Kerja</label>
+                        <select class="form-control" name="id_lokasi">
+                            <?php
+                            foreach ($lokasi as $v) {
+                                $s = '';
+                                if (isset($user)) {
+                                    if ($v->id_lokasi == $user->id_lokasi) {
+                                        $s = 'selected="selected"';
+                                    } else {
+                                        $s = '';
+                                    }
+                                }
+                                echo '<option value="' . $v->id_lokasi . '" ' . $s  . '>' . $v->nama_lokasi . '</option>';
                             }
                             ?>
                         </select>

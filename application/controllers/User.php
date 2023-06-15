@@ -19,6 +19,7 @@ class User extends CI_Controller
 		$this->db->select('*');
 		$this->db->from('fai_akun');
 		$this->db->join('fai_jabatan', 'fai_jabatan.id_jabatan = fai_akun.id_jabatan');
+		$this->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fai_akun.id_lokasi');
 		$this->db->where('fai_akun.tgl_delete', null);
 		$data['user'] = $this->db->get()->result();
 
@@ -37,6 +38,9 @@ class User extends CI_Controller
 		$this->db->where('tgl_delete', null);
 		$data['jabatan'] = $this->db->get('fai_jabatan')->result();
 
+		$this->db->where('tgl_delete', null);
+		$data['lokasi'] = $this->db->get('fai_lokasi')->result();
+
 		$this->load->view('header', $data);
 		$this->load->view('manage_user', $data);
 		$this->load->view('footer');
@@ -51,6 +55,9 @@ class User extends CI_Controller
 
 		$id_akun = $this->db->escape_str($this->uri->segment(3));
 
+		//$this->db->select('*');
+		//$this->db->from('fai_akun');
+		//$this->db->join('fai_akun_lokasi', 'fai_akun_lokasi.id_akun = fai_akun.id_akun');
 		$this->db->where('id_akun', $id_akun);
 		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun');
@@ -60,6 +67,9 @@ class User extends CI_Controller
 
 			$this->db->where('tgl_delete', null);
 			$data['jabatan'] = $this->db->get('fai_jabatan')->result();
+
+			$this->db->where('tgl_delete', null);
+			$data['lokasi'] = $this->db->get('fai_lokasi')->result();
 
 			$this->load->view('header', $data);
 			$this->load->view('manage_user', $data);
@@ -76,20 +86,23 @@ class User extends CI_Controller
 		try {
 			$this->db->trans_start();
 			$nama_user = $this->input->post('nama_user');
+			$id_user = randid();
 
 			if ($this->cek_nama($nama_user) == 0) {
 				$data = array(
-					'id_akun' => randid(),
+					'id_akun' => $id_user,
 					'nama_user' => $nama_user,
 					'email' => $this->input->post('email'),
 					'password' => md5('123456789'),
 					'id_jabatan' => $this->input->post('id_jabatan'),
+					'id_lokasi' => $this->input->post('id_lokasi'),
 					'sisa_cuti' => 12,
 					'role_user' => 1,
 					'role_pegawai' => $this->input->post('role_pegawai'),
 					'no_telp' => $this->input->post('no_telp')
 				);
 				$this->db->insert('fai_akun', $data);
+
 				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data telah disimpan</b></center></div>');
 			} else {
@@ -116,6 +129,7 @@ class User extends CI_Controller
 			$this->db->set('nama_user', $nama_user);
 			$this->db->set('email', $this->input->post('email'));
 			$this->db->set('id_jabatan', $this->input->post('id_jabatan'));
+			$this->db->set('id_lokasi', $this->input->post('id_lokasi'));
 			$this->db->set('no_telp', $this->input->post('no_telp'));
 			$this->db->set('role_pegawai', $this->input->post('role_pegawai'));
 			$this->db->where('id_akun', $id_akun);
@@ -128,7 +142,7 @@ class User extends CI_Controller
 			//}
 
 			$this->db->trans_complete();
-		} catch (\Throwable $th) {
+		} catch (\Throwable $e) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
 		}
@@ -147,7 +161,7 @@ class User extends CI_Controller
 
 			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data telah dihapus</b></center></div>');
-			
+
 			$this->db->trans_complete();
 		} catch (\Throwable $th) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">

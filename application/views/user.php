@@ -25,7 +25,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Jabatan</th>
-                                <th>Email</th>
+                                <th>Lokasi</th>
                                 <th>No Telp</th>
                                 <th>Opsi</th>
                             </tr>
@@ -34,7 +34,7 @@
                         <?php
                         $no = 1;
                         foreach($user as $v){
-                            echo '<tr><td>' . $no . '</td><td>' . $v->nama_user . '</td><td>' . $v->nama_jabatan . '</td><td>' . $v->email . '</td><td>' . $v->no_telp . '</td><td><a href="' . base_url('User/edit/' . $v->id_akun) . '" class="btn btn-warning">Edit</td></tr>';
+                            echo '<tr><td>' . $no . '</td><td>' . $v->nama_user . '</td><td>' . $v->nama_jabatan . '</td><td>' . $v->nama_lokasi . '</td><td>' . $v->no_telp . '</td><td><a href="' . base_url('User/edit/' . $v->id_akun) . '" class="btn btn-warning">Edit</td></tr>';
                             $no += 1;
                         }
 
