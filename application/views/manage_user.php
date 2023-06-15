@@ -27,7 +27,7 @@
                         <label>Email</label>
                         <input type="text" class="form-control" name="email" <?php if (isset($user)) {
                                                                                     echo 'value="' . $user->email . '"';
-                                                                                } ?> readonly>
+                                                                                } ?> required>
                     </div>
                     <div class="form-group">
                         <label>Jabatan</label>
