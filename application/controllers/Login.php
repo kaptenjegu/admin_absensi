@@ -33,6 +33,11 @@ class Login extends CI_Controller
             $_SESSION['nama_user'] = $data->nama_user;
             $_SESSION['id_jabatan'] = $data->id_jabatan;
             $_SESSION['role_user'] = $data->role_user;
+            $_SESSION['id_lokasi'] = $data->id_lokasi;
+            $_SESSION['nama_lokasi'] = $data->nama_lokasi;
+            $_SESSION['long_lokasi'] = $data->long_lokasi;
+            $_SESSION['lat_lokasi'] = $data->lat_lokasi;
+            $_SESSION['batas_lokasi'] = $data->batas_lokasi;
             $_SESSION['kunci'] = 'Login@Absen';
 
             redirect('Dashboard');
