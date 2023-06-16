@@ -163,7 +163,7 @@ class User extends CI_Controller
 					<center><b>Data telah dihapus</b></center></div>');
 
 			$this->db->trans_complete();
-		} catch (\Throwable $th) {
+		} catch (\Throwable $e) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
 		}
@@ -175,5 +175,26 @@ class User extends CI_Controller
 		$this->db->where('nama_user', $nama);
 		$n = $this->db->get('fai_akun')->num_rows();
 		return $n;
+	}
+
+	public function reset_password()
+	{
+		try {
+			$this->db->trans_start();
+			$id_akun = $this->db->escape_str($this->uri->segment(3));
+
+			$this->db->set('password', md5('123456789'));
+			$this->db->where('id_akun', $id_akun);
+			$this->db->update('fai_akun');
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Reset Password Berhasil</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+				<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('User');
 	}
 }

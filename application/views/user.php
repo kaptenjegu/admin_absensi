@@ -31,14 +31,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        $no = 1;
-                        foreach($user as $v){
-                            echo '<tr><td>' . $no . '</td><td>' . $v->nama_user . '</td><td>' . $v->nama_jabatan . '</td><td>' . $v->nama_lokasi . '</td><td>' . $v->no_telp . '</td><td><a href="' . base_url('User/edit/' . $v->id_akun) . '" class="btn btn-warning">Edit</td></tr>';
-                            $no += 1;
-                        }
+                            <?php
+                            $no = 1;
+                            foreach ($user as $v) {
+                                echo '<tr><td>' . $no . '</td><td>' . $v->nama_user . '</td><td>' . $v->nama_jabatan . '</td><td>' . $v->nama_lokasi . '</td><td>' . $v->no_telp . '</td>
+                                        <td><a href="' . base_url('User/edit/' . $v->id_akun) . '" class="btn btn-warning">Edit</a>&emsp;
+                                        <a href="' . base_url('User/reset_password/' . $v->id_akun) . '" class="btn btn-default" onclick="return confirm(\'Are you sure to reset for ' . $v->nama_user . ' ?\')">Reset Password</a></td></tr>';
+                                $no += 1;
+                            }
 
-                        ?>
+                            ?>
                         </tbody>
                     </table>
                 </div>
