@@ -68,6 +68,16 @@
                             </option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Bulan</label>
+                        <select class="form-control" name="id_lokasi">
+                            <?php 
+                            foreach($lokasi as $v){
+                                echo '<option value="' . $v->id_lokasi . '">' . $v->nama_lokasi . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Tampilkan</button>
                 </form>
                 <!--div class="table-responsive">

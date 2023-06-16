@@ -16,6 +16,9 @@ class Laporan extends CI_Controller
 		$data['page'] = 'Laporan';
 		$data['url'] = base_url('Laporan');
 
+		$this->db->where('tgl_delete', null);
+		$data['lokasi'] = $this->db->get('fai_lokasi')->result();
+
 		$this->load->view('header', $data);
 		$this->load->view('laporan', $data);
 		$this->load->view('footer');
@@ -27,6 +30,7 @@ class Laporan extends CI_Controller
 		$d = cal_days_in_month(CAL_GREGORIAN, 5, date('Y'));
 		//$nbln = date('m');
 		$nbln = intval($_GET['bulan']) ?? date('m');
+		$id_lokasi = $this->db->escape_str($_GET['id_lokasi']) ?? '';
 		$ny = date('Y');
 
 		switch ($nbln) {
@@ -80,13 +84,13 @@ class Laporan extends CI_Controller
 				break;
 		}
 
-		$this->data_absen($b, $b2, $d, $nbln, $ny);
+		$this->data_absen($b, $b2, $d, $nbln, $ny, $id_lokasi);
 	}
 
-	private function data_absen($b, $b2, $d, $nbln, $ny)
+	private function data_absen($b, $b2, $d, $nbln, $ny, $id_lokasi)
 	{
-
-		$table = '<div style="width:100%;text-align: center;font-weight: bold;">REKAP ABSENSI KARYAWAN PT. FALCON PRIMA TEHNIK<br>BULAN ' . $b2 . ' ' . date('Y') . ' <br></div><br><center><table border="2">';
+		$lokasi = $this->get_lokasi($id_lokasi);
+		$table = '<div style="width:100%;text-align: center;font-weight: bold;">REKAP ABSENSI KARYAWAN PT. FALCON PRIMA TEHNIK<br>BULAN ' . $b2 . ' ' . date('Y') . ' <br>TEMPAT KERJA ' . strtoupper($lokasi) . '</div><br><center><table border="2">';
 		$table2 = '<table border="2">';
 		$table3 = '<table border="2">';
 		//$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td>1-' . $b . '</td><td>2-' . $b . '</td><td>3-' . $b . '</td><td>4-' . $b . '</td><td>5-' . $b . '</td><td>6-' . $b . '</td><td>7-' . $b . '</td><td>8-' . $b . '</td><td>9-' . $b . '</td><td>10-' . $b . '</td><td>11-' . $b . '</td><td>12-' . $b . '</td><td>13-' . $b . '</td><td>14-' . $b . '</td><td>15-' . $b . '</td><td>16-' . $b . '</td><td>17-' . $b . '</td><td>18-' . $b . '</td><td>19-' . $b . '</td><td>20-' . $b . '</td><td>21-' . $b . '</td><td>22-' . $b . '</td><td>23-' . $b . '</td><td>24-' . $b . '</td><td>25-' . $b . '</td><td>26-' . $b . '</td><td>27-' . $b . '</td><td>28-' . $b . '</td></tr>';
@@ -103,7 +107,7 @@ class Laporan extends CI_Controller
 		}
 
 		$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
-		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td></tr>';
+		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td><td style="width:70px;text-align: center;background-color: greenyellow;">PAID</td><td style="width:70px;text-align: center;background-color: red;">UNPAID</td></tr>';
 		$table3 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
 
 		if (strlen($nbln) == 1) {
@@ -113,6 +117,7 @@ class Laporan extends CI_Controller
 		//get nama user
 		$this->db->where('tgl_delete', null);
 		$this->db->where('role_pegawai', 1);
+		$this->db->where('id_lokasi', $id_lokasi);
 		$user = $this->db->get('fai_akun')->result();
 
 		foreach ($user as $u) {
@@ -201,19 +206,19 @@ class Laporan extends CI_Controller
 
 			//$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align: center;"><b><center>' . strval($x + 1) . '</center></b></td><td style="background-color: green;">' . strval($x + 10) . '</td><td style="background-color: red;">5</td><td style="background-color: yellow;">6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 			$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td . '</tr>';
-			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;">' . $n_efektif . '</td></tr>';
+			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $n_efektif . '</td><td style="text-align:center;background-color: greenyellow;">' . ($m + $s + $lbr + $c) . '</td><td style="text-align:center;background-color: red;">' . ($ul + $tk) . '</td></tr>';
 			$table3 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td3. '</tr>';
 			$x += 1;
 		}
 
 		$table .= '</table><br>';
 		$table .= '<table><tr><td style="background-color: green;width:30px;text-align: center;">M</td><td>:</td><td>Masuk Kerja</td><td>&emsp;</td>';
-		$table .= '<td style="background-color: red;width:30px;text-align: center;">TK</td><td>:</td><td>Tidak Masuk Kerja</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: gray;width:30px;text-align: center;">C</td><td>:</td><td>Cuti</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td><td>:</td><td>Libur</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td><td>:</td><td>Sakit</td><td>&emsp;</td>';
-		$table .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td><td>:</td><td>Unpaid Leave</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">LBR</td><td>:</td><td>Lembur</td><td>&emsp;</td>';
+		$table .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td><td>:</td><td>Unpaid Leave</td><td>&emsp;</td>';
+		$table .= '<td style="background-color: red;width:30px;text-align: center;">TK</td><td>:</td><td>Tidak Masuk Kerja</td><td>&emsp;</td>';
 		$table .= '</tr></table><br><br>';
 		$table = $table . $table2 . '</table><br><br>' . $table3 . '</table></center>';
 		echo $table;
@@ -224,5 +229,12 @@ class Laporan extends CI_Controller
 		$this->db->where('tgl_libur', $tgl);
 		$n = $this->db->get('fai_libur')->num_rows();
 		return $n;
+	}
+
+	private function get_lokasi($id)
+	{
+		$this->db->where('id_lokasi', $id);
+		$h = $this->db->get('fai_lokasi')->first_row();
+		return $h->nama_lokasi;
 	}
 }
