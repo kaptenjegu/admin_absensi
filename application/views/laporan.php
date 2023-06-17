@@ -68,16 +68,20 @@
                             </option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Bulan</label>
-                        <select class="form-control" name="id_lokasi">
-                            <?php 
-                            foreach($lokasi as $v){
-                                echo '<option value="' . $v->id_lokasi . '">' . $v->nama_lokasi . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
+                    <?php if($_SESSION['role_user'] == 3){ ?>
+                        <div class="form-group">
+                            <label>Lokasi Kerja</label>
+                            <select class="form-control" name="id_lokasi">
+                                <?php 
+                                foreach($lokasi as $v){
+                                    echo '<option value="' . $v->id_lokasi . '">' . $v->nama_lokasi . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php }else{ ?>
+                        <input type="hidden" name = "id_lokasi" value="<?= $_SESSION['id_lokasi'] ?>">
+                    <?php } ?>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Tampilkan</button>
                 </form>
                 <!--div class="table-responsive">

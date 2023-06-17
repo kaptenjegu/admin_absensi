@@ -28,7 +28,9 @@ class Riwayat extends CI_Controller
 	private function data_user()
 	{
 		$this->db->where("tgl_delete", null);
-		//$this->db->where("role_pegawai", '1');
+		if($_SESSION['role_user'] == 2){
+			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);
+		}
 		$user = $this->db->get('fai_akun')->result();
 		return $user;
 	}

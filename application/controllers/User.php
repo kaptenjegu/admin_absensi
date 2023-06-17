@@ -21,6 +21,9 @@ class User extends CI_Controller
 		$this->db->join('fai_jabatan', 'fai_jabatan.id_jabatan = fai_akun.id_jabatan');
 		$this->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fai_akun.id_lokasi');
 		$this->db->where('fai_akun.tgl_delete', null);
+		if($_SESSION['role_user'] == 2){
+			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);
+		}
 		$data['user'] = $this->db->get()->result();
 
 		$this->load->view('header', $data);

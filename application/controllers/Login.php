@@ -20,7 +20,7 @@ class Login extends CI_Controller
         $password = $this->input->post('password');
         $this->db->where('email', $email);
         $this->db->where('password', md5($password));
-        $this->db->where('role_user', 2);
+        $this->db->where('(role_user = 2 OR role_user = 3)');
         $this->db->where('tgl_delete', null);
         $user = $this->db->get('fai_akun');
         //echo $user->num_rows();

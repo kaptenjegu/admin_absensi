@@ -24,12 +24,18 @@ class Dashboard extends CI_Controller
 		$this->db->or_where('fai_absen.pending', '8');
 		$this->db->or_where('fai_absen.pending', '9');
 		$this->db->or_where('fai_absen.pending', '1');
+		if($_SESSION['role_user'] == 2){
+			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);
+		}
 		$data['dashboard'] = $this->db->get()->result();
 
 		$this->db->select('*');
 		$this->db->from('fai_lembur');
 		$this->db->join('fai_akun', 'fai_lembur.id_akun = fai_akun.id_akun');
 		$this->db->where('fai_lembur.status_lembur', '0');
+		if($_SESSION['role_user'] == 2){
+			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);
+		}
 		$data['lembur'] = $this->db->get()->result();
 
 		$this->db->where('role_pegawai', 1);

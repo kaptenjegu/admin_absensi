@@ -63,12 +63,14 @@
                     <li>
                         <a href="<?= base_url("User") ?>" <?php if($page == "User"){ echo 'class="active-menu"';} ?>><i class="fa fa-users"></i> User</a>
                     </li>
-                    <li>
-                        <a href="<?= base_url("Jabatan") ?>" <?php if($page == "Jabatan"){ echo 'class="active-menu"';} ?>><i class="fa fa-briefcase"></i> Jabatan</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url("Tempat") ?>" <?php if($page == "Tempat"){ echo 'class="active-menu"';} ?>><i class="fa fa-globe"></i> Tempat Kerja</a>
-                    </li>
+                    <?php if($_SESSION['role_user'] == 3){ ?>
+                        <li>
+                            <a href="<?= base_url("Jabatan") ?>" <?php if($page == "Jabatan"){ echo 'class="active-menu"';} ?>><i class="fa fa-briefcase"></i> Jabatan</a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url("Tempat") ?>" <?php if($page == "Tempat"){ echo 'class="active-menu"';} ?>><i class="fa fa-globe"></i> Tempat Kerja</a>
+                        </li>
+                    <?php } ?>
                     <!--li>
                         <a href="<?//= base_url("Pengumuman") ?>" <?php //if($page == "Pengumuman"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Pengumuman</a>
                     </li-->
