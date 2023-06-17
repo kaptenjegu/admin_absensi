@@ -101,9 +101,14 @@ class Laporan extends CI_Controller
 		$th = '';
 
 
-		//header tabel
+		//header tabel || TGL
 		for ($n = 1; $n <= $d; $n++) {
-			$th .= '<td style="width:30px;text-align: center;">' . $n . '</td>';
+			if($this->cek_libur($ny . '-' . $nbln . '-' . $n) >= 1){
+				$tgl_merah = 'color: red;font-weight: bold;';
+			}else{
+				$tgl_merah = '';
+			}
+			$th .= '<td style="width:30px;text-align: center;' . $tgl_merah . '">' . $n . '</td>';
 		}
 
 		$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
