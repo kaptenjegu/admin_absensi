@@ -112,7 +112,7 @@ class Laporan extends CI_Controller
 		}
 
 		$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
-		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td><td style="width:70px;text-align: center;background-color: greenyellow;">PAID</td><td style="width:70px;text-align: center;background-color: red;">UNPAID</td></tr>';
+		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:70px;text-align: center;background-color: orange;">LS</td><td style="width:70px;text-align: center;background-color: yellow;">L</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td><td style="width:70px;text-align: center;background-color: greenyellow;">PAID</td><td style="width:70px;text-align: center;background-color: red;">UNPAID</td></tr>';
 		$table3 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
 
 		if (strlen($nbln) == 1) {
@@ -127,7 +127,7 @@ class Laporan extends CI_Controller
 
 		foreach ($user as $u) {
 			$td = $td3 = '';
-			$m = $tk = $c = $s = $ul = $lbr = $l_shift = 0;
+			$m = $tk = $c = $s = $ul = $lbr = $l_shift = $l_nshift = 0;
 			$n_efektif = 0;
 
 			$this->db->where('id_user', $u->id_akun);
@@ -180,24 +180,30 @@ class Laporan extends CI_Controller
 					if (($p == 0) or ($p == 2)) {
 						$td .= '<td style="background-color: green;width:30px;text-align: center;">M</td>';
 						$m += 1;
+						$n_efektif += 1;
 					} elseif ($p == 4) {
 						$td .= '<td style="background-color: gray;width:30px;text-align: center;">C</td>';
 						$c += 1;
+						$n_efektif += 1;
 					} elseif ($p == 5) {	//ULeave
 						$td .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td>';
 						$ul += 1;
+						$n_efektif += 1;
 					} elseif ($p == 6) {
 						$td .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td>';
 						$s += 1;
+						$n_efektif += 1;
 					} elseif ($p == 11) {
 						$td .= '<td style="background-color: orange;width:30px;text-align: center;">LS</td>';
 						$l_shift += 1;
 					}
-					$n_efektif += 1;
+					
 				} elseif (date('D', strtotime($ny . '-' . $nbln . '-' . $n)) == 'Sun') {
 					$td .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td>';
+					$l_nshift += 1;
 				} elseif ($this->cek_libur($ny . '-' . $nbln . '-' . $n) >= 1) {
 					$td .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td>';
+					$l_nshift += 1;
 				} else {
 					$td .= '<td style="background-color: red;width:30px;text-align: center;">TK</td>';
 					$tk += 1;
@@ -215,7 +221,7 @@ class Laporan extends CI_Controller
 
 			//$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align: center;"><b><center>' . strval($x + 1) . '</center></b></td><td style="background-color: green;">' . strval($x + 10) . '</td><td style="background-color: red;">5</td><td style="background-color: yellow;">6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 			$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td . '</tr>';
-			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $n_efektif . '</td><td style="text-align:center;background-color: greenyellow;">' . ($m + $s + $lbr + $c) . '</td><td style="text-align:center;background-color: red;">' . ($ul + $tk) . '</td></tr>';
+			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $l_shift . '</td><td style="text-align:center;">' . $l_nshift . '</td><td style="text-align:center;">' . $n_efektif . '</td><td style="text-align:center;background-color: greenyellow;">' . ($m + $s + $lbr + $c) . '</td><td style="text-align:center;background-color: red;">' . ($ul + $tk) . '</td></tr>';
 			$table3 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td3. '</tr>';
 			$x += 1;
 		}
