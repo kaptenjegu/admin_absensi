@@ -127,7 +127,7 @@ class Laporan extends CI_Controller
 
 		foreach ($user as $u) {
 			$td = $td3 = '';
-			$m = $tk = $c = $s = $ul = $lbr = 0;
+			$m = $tk = $c = $s = $ul = $lbr = $l_shift = 0;
 			$n_efektif = 0;
 
 			$this->db->where('id_user', $u->id_akun);
@@ -136,6 +136,7 @@ class Laporan extends CI_Controller
 			$this->db->where('pending <> 7');
 			$this->db->where('pending <> 8');
 			$this->db->where('pending <> 9');
+			$this->db->where('pending <> 10');
 			$absen = $this->db->get('fai_absen')->result();
 
 			$this->db->where('id_akun', $u->id_akun);
@@ -143,7 +144,7 @@ class Laporan extends CI_Controller
 			$lembur = $this->db->get('fai_lembur')->result();
 
 			for ($n = 1; $n <= $d; $n++) {	// loop jumlah tgl
-				$n_data = $n_lembur = $plbr =  0;
+				$n_data = $n_lembur = $plbr =   0;
 
 				//mencari data absen
 				foreach ($absen as $a) {
@@ -188,6 +189,9 @@ class Laporan extends CI_Controller
 					} elseif ($p == 6) {
 						$td .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td>';
 						$s += 1;
+					} elseif ($p == 11) {
+						$td .= '<td style="background-color: orange;width:30px;text-align: center;">LS</td>';
+						$l_shift += 1;
 					}
 					$n_efektif += 1;
 				} elseif (date('D', strtotime($ny . '-' . $nbln . '-' . $n)) == 'Sun') {
@@ -220,6 +224,7 @@ class Laporan extends CI_Controller
 		$table .= '<table><tr><td style="background-color: green;width:30px;text-align: center;">M</td><td>:</td><td>Masuk Kerja</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: gray;width:30px;text-align: center;">C</td><td>:</td><td>Cuti</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td><td>:</td><td>Libur</td><td>&emsp;</td>';
+		$table .= '<td style="background-color: orange;width:30px;text-align: center;">LS</td><td>:</td><td>Libur Shift</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #0cd107;width:30px;text-align: center;">S</td><td>:</td><td>Sakit</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">LBR</td><td>:</td><td>Lembur</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td><td>:</td><td>Unpaid Leave</td><td>&emsp;</td>';

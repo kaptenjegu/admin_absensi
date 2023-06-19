@@ -102,6 +102,7 @@ class User extends CI_Controller
 					'sisa_cuti' => 12,
 					'role_user' => 1,
 					'role_pegawai' => $this->input->post('role_pegawai'),
+					'role_shift' => $this->input->post('role_shift'),
 					'no_telp' => $this->input->post('no_telp')
 				);
 				$this->db->insert('fai_akun', $data);
@@ -135,6 +136,7 @@ class User extends CI_Controller
 			$this->db->set('id_lokasi', $this->input->post('id_lokasi'));
 			$this->db->set('no_telp', $this->input->post('no_telp'));
 			$this->db->set('role_pegawai', $this->input->post('role_pegawai'));
+			$this->db->set('role_shift', $this->input->post('role_shift'));
 			$this->db->where('id_akun', $id_akun);
 			$this->db->update('fai_akun');
 			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">

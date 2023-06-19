@@ -20,10 +20,11 @@ class Dashboard extends CI_Controller
 		$this->db->from('fai_absen');
 		$this->db->join('fai_akun', 'fai_absen.id_user = fai_akun.id_akun');
 		$this->db->join('fai_pending_detail', 'fai_absen.pending = fai_pending_detail.id_pending');
-		$this->db->where('fai_absen.pending', '7');
-		$this->db->or_where('fai_absen.pending', '8');
-		$this->db->or_where('fai_absen.pending', '9');
-		$this->db->or_where('fai_absen.pending', '1');
+		$this->db->where('(fai_absen.pending = 7 OR fai_absen.pending = 8 OR fai_absen.pending = 9 OR fai_absen.pending = 1 OR fai_absen.pending = 10)');
+		//$this->db->or_where('fai_absen.pending', '8');
+		//$this->db->or_where('fai_absen.pending', '9');
+		//$this->db->or_where('fai_absen.pending', '1');
+		//$this->db->or_where('fai_absen.pending', '10');
 		if($_SESSION['role_user'] == 2){
 			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);
 		}
@@ -121,6 +122,10 @@ class Dashboard extends CI_Controller
 				case 9:	//sakit
 					$acc = 6;
 					$tipe = 'Sakit';
+					break;
+				case 10:	//Libur Shift
+					$acc = 11;
+					$tipe = 'Libur Shift';
 					break;
 			}
 

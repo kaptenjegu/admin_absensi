@@ -91,6 +91,21 @@
                                                 } ?>>Atasan</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Shift</label>
+                        <select class="form-control" name="role_shift">
+                            <option value="1" <?php if (isset($user)) {
+                                                    if ($user->role_shift == 1) {
+                                                        echo 'selected="selected"';
+                                                    }
+                                                } ?>>Shift Tetap / Jam Kerja Tetap</option>
+                            <option value="2" <?php if (isset($user)) {
+                                                    if ($user->role_shift == 2) {
+                                                        echo 'selected="selected"';
+                                                    }
+                                                } ?>>Shift Berubah-ubah / Jam Kerja Berubah</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-info">Simpan</button>&emsp;
                     <a href="<?= base_url('User') ?>" class="btn btn-default">Kembali</a>&emsp;&emsp;&emsp;
                     <?php if (isset($user)) { ?>
