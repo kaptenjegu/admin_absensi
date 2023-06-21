@@ -26,10 +26,8 @@ class Laporan extends CI_Controller
 
 	public function laporan()
 	{
-
-		$d = cal_days_in_month(CAL_GREGORIAN, 5, date('Y'));
-		//$nbln = date('m');
 		$nbln = intval($_GET['bulan']) ?? date('m');
+		$d = cal_days_in_month(CAL_GREGORIAN, $nbln, date('Y'));
 		$id_lokasi = $this->db->escape_str($_GET['id_lokasi']) ?? '';
 		$ny = date('Y');
 
@@ -112,7 +110,7 @@ class Laporan extends CI_Controller
 		}
 
 		$table .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
-		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:70px;text-align: center;background-color: orange;">LS</td><td style="width:70px;text-align: center;background-color: yellow;">L</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td><td style="width:70px;text-align: center;background-color: greenyellow;">PAID</td><td style="width:70px;text-align: center;background-color: red;">UNPAID</td></tr>';
+		$table2 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td><td style="width:30px;text-align: center;background-color: green;">M</td><td style="width:30px;text-align: center;background-color: gray;">C</td><td style="width:30px;text-align: center;background-color: #0cd107;">S</td><td style="width:30px;text-align: center;background-color: #0a8ef3;">LBR</td><td style="width:30px;text-align: center;background-color: #c97d8c;">UL</td><td style="width:30px;text-align: center;background-color: red;">TK</td><td style="width:30px;text-align: center;background-color: orange;">LS</td><td style="width:30px;text-align: center;background-color: yellow;">L</td><td style="width:70px;text-align: center;background-color: white;">Hari Kerja</td><td style="width:70px;text-align: center;background-color: greenyellow;">PAID</td><td style="width:70px;text-align: center;background-color: red;">UNPAID</td></tr>';
 		$table3 .= '<tr><td style="text-align:center;">No</td><td style="text-align:center;">Nama</td>' . $th . '</tr>';
 
 		if (strlen($nbln) == 1) {
