@@ -254,6 +254,22 @@
     </script>
 <?php } ?>
 
+<?php if ($page == "Tools") { ?>
+    <script type="text/javascript">
+        $(function() {
+            $('input[name="tgl_range"]').daterangepicker({
+                //singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+
+            });
+        });
+    </script>
+<?php } ?>
 
 </body>
 

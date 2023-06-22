@@ -55,32 +55,55 @@
                 <ul class="nav" id="main-menu">
 
                     <li>
-                        <a href="<?= base_url() ?>" <?php if($page == "Dashboard"){ echo 'class="active-menu"';} ?>><i class="fa fa-dashboard"></i> Dashboard</a>
+                        <a href="<?= base_url() ?>" <?php if ($page == "Dashboard") {
+                                                        echo 'class="active-menu"';
+                                                    } ?>><i class="fa fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="<?= base_url("Riwayat") ?>" <?php if($page == "Riwayat"){ echo 'class="active-menu"';} ?>><i class="fa fa-folder-open"></i> Riwayat Absen</a>
+                        <a href="<?= base_url("Riwayat") ?>" <?php if ($page == "Riwayat") {
+                                                                    echo 'class="active-menu"';
+                                                                } ?>><i class="fa fa-folder-open"></i> Riwayat Absen</a>
                     </li>
                     <li>
-                        <a href="<?= base_url("User") ?>" <?php if($page == "User"){ echo 'class="active-menu"';} ?>><i class="fa fa-users"></i> User</a>
+                        <a href="<?= base_url("User") ?>" <?php if ($page == "User") {
+                                                                echo 'class="active-menu"';
+                                                            } ?>><i class="fa fa-users"></i> User</a>
                     </li>
-                    <?php if($_SESSION['role_user'] == 3){ ?>
+                    <?php if ($_SESSION['role_user'] == 3) { ?>
                         <li>
-                            <a href="<?= base_url("Jabatan") ?>" <?php if($page == "Jabatan"){ echo 'class="active-menu"';} ?>><i class="fa fa-briefcase"></i> Jabatan</a>
+                            <a href="<?= base_url("Jabatan") ?>" <?php if ($page == "Jabatan") {
+                                                                        echo 'class="active-menu"';
+                                                                    } ?>><i class="fa fa-briefcase"></i> Jabatan</a>
                         </li>
                         <li>
-                            <a href="<?= base_url("Tempat") ?>" <?php if($page == "Tempat"){ echo 'class="active-menu"';} ?>><i class="fa fa-globe"></i> Tempat Kerja</a>
+                            <a href="<?= base_url("Tempat") ?>" <?php if ($page == "Tempat") {
+                                                                    echo 'class="active-menu"';
+                                                                } ?>><i class="fa fa-globe"></i> Tempat Kerja</a>
                         </li>
                     <?php } ?>
                     <!--li>
-                        <a href="<?//= base_url("Pengumuman") ?>" <?php //if($page == "Pengumuman"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Pengumuman</a>
+                        <a href="<? //= base_url("Pengumuman") 
+                                    ?>" <?php //if($page == "Pengumuman"){ echo 'class="active-menu"';} 
+                                                                    ?>><i class="fa fa-table"></i> Pengumuman</a>
                     </li-->
                     <li>
-                        <a href="<?= base_url("Libur") ?>" <?php if($page == "Libur"){ echo 'class="active-menu"';} ?>><i class="fa fa-table"></i> Hari Libur</a>
+                        <a href="<?= base_url("Libur") ?>" <?php if ($page == "Libur") {
+                                                                echo 'class="active-menu"';
+                                                            } ?>><i class="fa fa-table"></i> Hari Libur</a>
                     </li>
                     <li>
-                        <a href="<?= base_url("Laporan") ?>" <?php if($page == "Laporan"){ echo 'class="active-menu"';} ?>><i class="fa fa-download"></i> Laporan </a>
+                        <a href="<?= base_url("Laporan") ?>" <?php if ($page == "Laporan") {
+                                                                    echo 'class="active-menu"';
+                                                                } ?>><i class="fa fa-download"></i> Laporan </a>
                     </li>
-                    
+                    <?php if ($_SESSION['role_user'] == 3) { ?>
+                        <li>
+                            <a href="<?= base_url("Tools") ?>" <?php if ($page == "Tools") {
+                                                                    echo 'class="active-menu"';
+                                                                } ?>><i class="fa fa-wrench"></i> Menu Khusus </a>
+                        </li>
+                    <?php } ?>
+
                 </ul>
 
             </div>
