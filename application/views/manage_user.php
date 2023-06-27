@@ -19,7 +19,7 @@
                                                                 } ?>">
                     <div class="form-group">
                         <label>Nama</label>
-                        <input type="text" class="form-control" name="nama_user" <?php if (isset($user)) {
+                        <input type="text" class="form-control" name="nama_user" maxlength="20" <?php if (isset($user)) {
                                                                                         echo 'value="' . $user->nama_user . '"';
                                                                                     } ?> required>
                     </div>

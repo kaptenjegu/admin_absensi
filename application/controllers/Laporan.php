@@ -249,6 +249,6 @@ class Laporan extends CI_Controller
 	{
 		$this->db->where('id_lokasi', $id);
 		$h = $this->db->get('fai_lokasi')->first_row();
-		return $h->nama_lokasi;
+		return $h->nama_lokasi ?? 'ERROR';
 	}
 }
