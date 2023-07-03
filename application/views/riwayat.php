@@ -11,6 +11,7 @@
 
 <div class="row">
     <div class="col-md-12">
+    <?= $this->session->flashdata('msg') ?>
         <!-- Advanced Tables -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -23,10 +24,10 @@
                         <select class="form-control" name="id_akun">
                             <?php
                             foreach ($user as $v) {
-                                if (isset($_GET['id_akun'])){
-                                    if($_GET['id_akun'] == $v->id_akun){
+                                if (isset($_GET['id_akun'])) {
+                                    if ($_GET['id_akun'] == $v->id_akun) {
                                         $r = 'selected="true"';
-                                    }else{
+                                    } else {
                                         $r = '';
                                     }
                                 }
@@ -139,12 +140,49 @@
                     </div>
                     <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Tampilkan</button>
                 </form>
-                <br>
-                <br>
-                <br>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <b>Data Absen</b>
-                <br>
-                <br>
+            </div>
+            <div class="panel-body">
+                <?php if(isset($_GET['bulan'])){ ?>
+                <form role="form" action="<?= base_url('Riwayat/tambah_libur_lembur/') ?>" method="POST">
+                    <div class="form-group">
+                        <label>Tambah Absen Libur Shift / Lembur</label>
+                    </div>
+                    <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
+                    <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
+                    <div class="form-group">
+                        <label>Tipe Absen</label>
+                        <select class="form-control" name="tipe_absen">
+                            <option value="11">Libur Shift</option>
+                            <option value="99999">Lembur</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="text" class="form-control" name="tgl_absen" id="tgl_absen" required>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Mulai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                        <input type="text" class="form-control" name="mulai_absen" id="mulai_absen" required>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Selesai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                        <input type="text" class="form-control" name="selesai_absen" id="selesai_absen" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Point Lembur (Jika libur shift, silakan diisi 0)</label>
+                        <input type="number" class="form-control" name="point_lembur" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-info"><i class="fa fa-plus"></i> Tambahkan</button>
+                </form>
+                <br><br><br>
+                <?php } ?>
+
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover" id="dataTables-master">
                         <thead>
@@ -173,10 +211,13 @@
                         </tbody>
                     </table>
                 </div>
+
                 <br>
                 <br>
                 <br>
                 <b>Data Lembur</b>
+
+
                 <br>
                 <br>
                 <div class="table-responsive">
@@ -211,5 +252,11 @@
                 </div>
             </div>
         </div>
+
+        <br>
+        <br>
+
+
+
     </div>
 </div>

@@ -217,6 +217,49 @@
     </script>
 <?php } ?>
 
+<?php if ($page == "Riwayat") { ?>
+    <script type="text/javascript">
+        $(function() {
+            $('input[name="tgl_absen"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+
+            });
+        });
+
+        $("#mulai_absen").daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            singleDatePicker:true,
+            timePickerIncrement: 1,
+            timePickerSeconds: false,
+            locale: {
+                format: 'HH:mm'
+            }
+        }).on('show.daterangepicker', function(ev, picker) {
+            picker.container.find(".calendar-table").hide();
+        });
+
+        $("#selesai_absen").daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            singleDatePicker:true,
+            timePickerIncrement: 1,
+            timePickerSeconds: false,
+            locale: {
+                format: 'HH:mm'
+            }
+        }).on('show.daterangepicker', function(ev, picker) {
+            picker.container.find(".calendar-table").hide();
+        });
+    </script>
+<?php } ?>
+
 <?php if ($page == "Libur") { ?>
     <script type="text/javascript">
         $(function() {
