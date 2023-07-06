@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-md-12">
-    <?= $this->session->flashdata('msg') ?>
+        <?= $this->session->flashdata('msg') ?>
         <!-- Advanced Tables -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -142,45 +142,66 @@
                 </form>
             </div>
         </div>
+        
+        <?php if (isset($_GET['bulan'])) { ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Tambah Data Cuti
+            </div>
+            <div class="panel-body">
+                <form role="form" action="<?= base_url('Riwayat/tambah_cuti/') ?>" method="POST">
+                    <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
+                    <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
+                    
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="text" class="form-control" name="tgl_range" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Tambahkan</button>
+                </form>
+            </div>
+        </div>
+        <?php } ?>
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <b>Data Absen</b>
             </div>
             <div class="panel-body">
-                <?php if(isset($_GET['bulan'])){ ?>
-                <form role="form" action="<?= base_url('Riwayat/tambah_libur_lembur/') ?>" method="POST">
-                    <div class="form-group">
-                        <label>Tambah Absen Libur Shift / Lembur</label>
-                    </div>
-                    <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
-                    <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
-                    <div class="form-group">
-                        <label>Tipe Absen</label>
-                        <select class="form-control" name="tipe_absen">
-                            <option value="11">Libur Shift</option>
-                            <option value="99999">Lembur</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="text" class="form-control" name="tgl_absen" id="tgl_absen" required>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Mulai Lembur (Jika libur shift, silakan diabaikan)</b></label>
-                        <input type="text" class="form-control" name="mulai_absen" id="mulai_absen" required>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Selesai Lembur (Jika libur shift, silakan diabaikan)</b></label>
-                        <input type="text" class="form-control" name="selesai_absen" id="selesai_absen" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Point Lembur (Jika libur shift, silakan diisi 0)</label>
-                        <input type="number" class="form-control" name="point_lembur" step="0.01" required>
-                    </div>
-                    <button type="submit" class="btn btn-info"><i class="fa fa-plus"></i> Tambahkan</button>
-                </form>
-                <br><br><br>
+                <?php if (isset($_GET['bulan'])) { ?>
+                    <form role="form" action="<?= base_url('Riwayat/tambah_libur_lembur/') ?>" method="POST">
+                        <div class="form-group">
+                            <label>Tambah Absen Libur Shift / Lembur</label>
+                        </div>
+                        <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
+                        <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
+                        <div class="form-group">
+                            <label>Tipe Absen</label>
+                            <select class="form-control" name="tipe_absen">
+                                <option value="11">Libur Shift</option>
+                                <option value="99999">Lembur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal</label>
+                            <input type="text" class="form-control" name="tgl_absen" id="tgl_absen" required>
+                        </div>
+                        <div class="form-group">
+                            <label><b>Mulai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                            <input type="text" class="form-control" name="mulai_absen" id="mulai_absen" required>
+                        </div>
+                        <div class="form-group">
+                            <label><b>Selesai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                            <input type="text" class="form-control" name="selesai_absen" id="selesai_absen" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Point Lembur (Jika libur shift, silakan diisi 0)</label>
+                            <input type="number" class="form-control" name="point_lembur" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-info"><i class="fa fa-plus"></i> Tambahkan</button>
+                    </form>
+                    <br><br><br>
                 <?php } ?>
 
                 <div class="table-responsive">
@@ -192,6 +213,7 @@
                                 <th>Absen Masuk</th>
                                 <th>Absen Pulang</th>
                                 <th>Catatan</th>
+                                <th>Opsi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -204,6 +226,7 @@
                                     <td>' . $v->absen_masuk . '</td>
                                     <td>' . $v->absen_pulang . '</td>
                                     <td>' . $v->catatan_pending . '</td>
+                                    <td><a href="' . base_url('Riwayat/delete_absen/' . $v->id_absen . '/' . $_GET['id_akun'] . '/' . $_GET['bulan']) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data tanggal ' . date('d-m-Y', strtotime($v->tgl_absen)) . ' ?\')"><i class="fa fa-trash-o"></i> Hapus</a></td>
                                 </tr>';
                                 $no += 1;
                             }

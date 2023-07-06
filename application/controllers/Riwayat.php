@@ -81,19 +81,24 @@ class Riwayat extends CI_Controller
 			$selesai_absen = $this->input->post('selesai_absen');
 
 			if ($tipe_absen == 11) {	//libur shift
-				$data = array(
-					'id_absen' => randid(),
-					'id_user' => $id_akun,
-					'tgl_absen' => $tgl_absen,
-					'absen_masuk' 	=> '',
-					'absen_pulang' 	=> '',
-					'pending' 	=> 11,
-					'catatan_pending' 	=> 'Libur Shift'
-				);
-				$this->db->insert('fai_absen', $data);
+				if($this->cek_dobel($tgl_absen,$id_akun,$tipe_absen) == 0){
+					$data = array(
+						'id_absen' => randid(),
+						'id_user' => $id_akun,
+						'tgl_absen' => $tgl_absen,
+						'absen_masuk' 	=> '',
+						'absen_pulang' 	=> '',
+						'pending' 	=> 11,
+						'catatan_pending' 	=> 'Libur Shift'
+					);
+					$this->db->insert('fai_absen', $data);
 
-				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
-					<center><b>Data Libur Shift telah ditambahkan</b></center></div>');
+					$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+						<center><b>Data Libur Shift telah ditambahkan</b></center></div>');
+				}else{
+					$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Error, data sudah ada di database.</b></center></div>');
+				}
 			} elseif ($tipe_absen == 99999) {	//lembur
 				$data = array(
 					'id_lembur' => randid(),
@@ -121,4 +126,77 @@ class Riwayat extends CI_Controller
 		}
 		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
 	}
+
+	public function tambah_cuti()
+	{
+		try {
+			$this->db->trans_start();
+
+			$id_akun = $this->db->escape_str($this->input->post('id_akun'));
+			$bulan = $this->input->post('bulan');
+			$tgl_range = $this->input->post('tgl_range');
+
+			$tgl = explode(' - ', $tgl_range);
+			$t1 = explode('-', $tgl[0]);
+			$t2 = explode('-', $tgl[1]);
+			$q = "INSERT INTO fai_absen(id_absen,id_user,tgl_absen,absen_masuk,absen_pulang,pending,catatan_pending)
+                            VALUES ";
+			for ($n = $t1[2]; $n <= $t2[2]; $n++) {
+				if (strlen($n) == 1) {
+					$n1 = '0' . $n;
+				} else {
+					$n1 = $n;
+				}
+
+				if ($n == $t2[2]) {
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti')";
+                } else {
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti'),";
+                }
+			}
+
+			$this->db->query($q);
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Cuti telah ditambahkan</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
+	}
+
+	public function delete_absen()
+	{
+		try {
+			$this->db->trans_start();
+			
+			$id_akun = $this->db->escape_str($this->uri->segment(4));
+			$bulan = $this->uri->segment(5);
+			$id_absen = $this->db->escape_str($this->uri->segment(3));
+
+			$this->db->where('id_absen', $id_absen);
+			$this->db->delete('fai_absen');
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Absen telah dihapus</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
+	}
+
+	private function cek_dobel($tgl, $id_akun,$pending)
+    {
+        $this->db->where('tgl_absen', $tgl);
+        $this->db->where('id_user', $id_akun);
+        $this->db->where('pending', $pending);
+        $n = $this->db->get('fai_absen')->num_rows();
+        return $n;
+    }
 }
