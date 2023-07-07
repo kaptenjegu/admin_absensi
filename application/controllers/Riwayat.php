@@ -120,7 +120,7 @@ class Riwayat extends CI_Controller
 			}
 
 			$this->db->trans_complete();
-		} catch (\Throwable $th) {
+		} catch (\Throwable $e) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
 		}
@@ -182,6 +182,29 @@ class Riwayat extends CI_Controller
 
 			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data Absen telah dihapus</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
+	}
+
+	public function delete_lembur()
+	{
+		try {
+			$this->db->trans_start();
+			
+			$id_akun = $this->db->escape_str($this->uri->segment(4));
+			$bulan = $this->uri->segment(5);
+			$id_lembur = $this->db->escape_str($this->uri->segment(3));
+
+			$this->db->where('id_lembur', $id_lembur);
+			$this->db->delete('fai_lembur');
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Lembur telah dihapus</b></center></div>');
 
 			$this->db->trans_complete();
 		} catch (\Throwable $e) {

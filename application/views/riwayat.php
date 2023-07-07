@@ -249,10 +249,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Tanggal</th>
-                                <th>Mulai Lembur</th>
-                                <th>Selesai Lembur</th>
+                                <th>Jam</th>
                                 <th>Point</th>
                                 <th>Keterangan</th>
+                                <th>Opsi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -262,10 +262,10 @@
                                 echo '<tr>
                                     <td>' . $no . '</td>
                                     <td>' . date('d-m-Y', strtotime($v->tgl_lembur)) . '</td>
-                                    <td>' . $v->mulai_lembur . '</td>
-                                    <td>' . $v->selesai_lembur . '</td>
+                                    <td>' . $v->mulai_lembur . ' - ' . $v->selesai_lembur . '</td>
                                     <td>' . $v->point_lembur . '</td>
                                     <td>' . $v->keterangan . '</td>
+                                    <td><a href="' . base_url('Riwayat/delete_lembur/' . $v->id_lembur . '/' . $_GET['id_akun'] . '/' . $_GET['bulan']) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus lembur tanggal ' . date('d-m-Y', strtotime($v->tgl_lembur)) . ' ?\')"><i class="fa fa-trash-o"></i> Hapus</a></td>
                                 </tr>';
                                 $no += 1;
                             }
