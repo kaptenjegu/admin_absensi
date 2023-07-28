@@ -94,7 +94,7 @@ class User extends CI_Controller
 			if ($this->cek_nama($nama_user) == 0) {
 				$data = array(
 					'id_akun' => $id_user,
-					'nama_user' => $nama_user,
+					'nama_user' => strtoupper($nama_user),
 					'email' => $this->input->post('email'),
 					'password' => md5('123456789'),
 					'id_jabatan' => $this->input->post('id_jabatan'),
