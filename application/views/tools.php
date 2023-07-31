@@ -24,6 +24,7 @@
                         <select class="form-control" name="id_metode" required>
                             <option value="1">Auto Absen</option>                            
                             <option value="2">Auto Cuti</option>                            
+                            <option value="3">Auto Absen tanpa libur</option>                            
                         </select>
                     </div>
                     <div class="form-group">
