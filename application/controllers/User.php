@@ -131,7 +131,7 @@ class User extends CI_Controller
 
 			//if ($this->cek_nama($nama_user) == 0) {
 			$this->db->set('nama_user', $nama_user);
-			//$this->db->set('email', $this->input->post('email'));
+			$this->db->set('email', $this->input->post('email'));
 			$this->db->set('id_jabatan', $this->input->post('id_jabatan'));
 			$this->db->set('id_lokasi', $this->input->post('id_lokasi'));
 			$this->db->set('no_telp', $this->input->post('no_telp'));
