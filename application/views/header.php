@@ -96,7 +96,7 @@
                                                                     echo 'class="active-menu"';
                                                                 } ?>><i class="fa fa-download"></i> Laporan </a>
                     </li>
-                    <?php if ($_SESSION['role_user'] == 3) { ?>
+                    <?php if ($_SESSION['role_user'] == 3 OR $_SESSION['role_user'] == 2) { ?>
                         <li>
                             <a href="<?= base_url("Tools") ?>" <?php if ($page == "Tools") {
                                                                     echo 'class="active-menu"';
