@@ -22,9 +22,11 @@
                     <div class="form-group">
                         <label>Metode</label>
                         <select class="form-control" name="id_metode" required>
-                            <option value="1">Auto Absen</option>                            
+                            <option value="1">Auto Absen Masuk</option>                            
                             <option value="2">Auto Cuti</option>                            
-                            <option value="3">Auto Absen tanpa libur</option>                            
+                            <option value="3">Auto Absen Masuk tanpa libur</option>                            
+                            <option value="4">Absen Sakit</option>                            
+                            <option value="5">Unpaid Leave</option>                            
                         </select>
                     </div>
                     <div class="form-group">
