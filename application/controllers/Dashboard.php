@@ -19,6 +19,7 @@ class Dashboard extends CI_Controller
 		$this->db->select('*');
 		$this->db->from('fai_absen');
 		$this->db->join('fai_akun', 'fai_absen.id_user = fai_akun.id_akun');
+		$this->db->join('fai_lokasi', 'fai_akun.id_lokasi = fai_lokasi.id_lokasi');
 		$this->db->join('fai_pending_detail', 'fai_absen.pending = fai_pending_detail.id_pending');
 		$this->db->where('(fai_absen.pending = 7 OR fai_absen.pending = 8 OR fai_absen.pending = 9 OR fai_absen.pending = 1 OR fai_absen.pending = 10)');
 		//$this->db->or_where('fai_absen.pending', '8');
