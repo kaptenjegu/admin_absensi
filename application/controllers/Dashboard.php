@@ -34,6 +34,7 @@ class Dashboard extends CI_Controller
 		$this->db->select('*');
 		$this->db->from('fai_lembur');
 		$this->db->join('fai_akun', 'fai_lembur.id_akun = fai_akun.id_akun');
+		$this->db->join('fai_lokasi', 'fai_akun.id_lokasi = fai_lokasi.id_lokasi');
 		$this->db->where('fai_lembur.status_lembur', '0');
 		if($_SESSION['role_user'] == 2){
 			$this->db->where('fai_akun.id_lokasi', $_SESSION['id_lokasi']);

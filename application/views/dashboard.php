@@ -95,6 +95,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Lokasi</th>
                                 <th>Tanggal</th>
                                 <th>Absen Masuk</th>
                                 <th>Absen Pulang</th>
@@ -109,6 +110,7 @@
                                 echo '<tr>
                                         <th>' . $no . '</th>
                                         <th>' . $v->nama_user . '</th>
+                                        <th>' . $v->nama_lokasi . '</th>
                                         <th>' . date('d-m-Y',strtotime($v->tgl_lembur)) . '</th>
                                         <th>' . $v->mulai_lembur . '</th>
                                         <th>' . $v->selesai_lembur . '</th>
