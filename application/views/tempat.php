@@ -31,7 +31,7 @@
                             <?php
                             $no = 1;
                             foreach ($lokasi as $v) {
-                                echo '<tr><td>' . $no . '</td><td>' . $v->nama_lokasi . '</td><td><button class="btn btn-warning" onclick="get_lokasi(\'' . $v->id_lokasi . '\')">Detail</button></td></tr>';
+                                echo '<tr><td>' . $no . '</td><td><span style="color:' . $v->warna_lokasi . ';font-weight: bold;">' . $v->nama_lokasi . '</span></td><td><button class="btn btn-warning" onclick="get_lokasi(\'' . $v->id_lokasi . '\')">Detail</button></td></tr>';
                                 $no += 1;
                             }
                             ?>
@@ -68,6 +68,10 @@
                     <div class="form-group">
                         <label>Batas Toleran</label>
                         <input type="text" class="form-control" name="batas_lokasi" placeholder="satuan meter" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Warna Lokasi</label>
+                        <input type="text" class="form-control" name="warna_lokasi" placeholder="#XXXXXX" required>
                     </div>
                 </div>
 
@@ -107,6 +111,10 @@
                     <div class="form-group">
                         <label>Batas Toleran</label>
                         <input type="text" class="form-control" name="batas_lokasi" placeholder="satuan meter" id="batas_lokasi" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Warna Lokasi</label>
+                        <input type="text" class="form-control" name="warna_lokasi" id="warna_lokasi" placeholder="#XXXXXX" required>
                     </div>
                 </div>
                 <div class="modal-footer">

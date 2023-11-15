@@ -40,6 +40,16 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Lokasi</label>
+                        <select class="form-control" name="id_lokasi">
+                            <?php
+                            foreach ($lokasi as $v) {
+                                echo '<option value="' . $v->id_lokasi . '">' . $v->nama_lokasi . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Tanggal</label>
                         <input type="text" class="form-control" name="tgl_range" required>
                     </div>

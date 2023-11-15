@@ -33,6 +33,7 @@ class Tempat extends CI_Controller
 			$long_lokasi = $this->input->post('long_lokasi');
 			$lat_lokasi = $this->input->post('lat_lokasi');
 			$batas_lokasi = $this->input->post('batas_lokasi');
+			$warna_lokasi = $this->input->post('warna_lokasi');
 
 			if ($this->cek_lokasi($nama_lokasi) == 0) {
 				$data = array(
@@ -40,7 +41,8 @@ class Tempat extends CI_Controller
 					'nama_lokasi' => $nama_lokasi,
 					'long_lokasi' => $long_lokasi,
 					'lat_lokasi' => $lat_lokasi,
-					'batas_lokasi' => $batas_lokasi
+					'batas_lokasi' => $batas_lokasi,
+					'warna_lokasi' => $warna_lokasi
 				);
 				$this->db->insert('fai_lokasi', $data);
 
@@ -85,12 +87,14 @@ class Tempat extends CI_Controller
 			$long_lokasi = $this->db->escape_str($this->input->post('long_lokasi'));
 			$lat_lokasi = $this->db->escape_str($this->input->post('lat_lokasi'));
 			$batas_lokasi = $this->db->escape_str($this->input->post('batas_lokasi'));
+			$warna_lokasi = $this->input->post('warna_lokasi');
 
 			//if ($this->cek_lokasi($nama_lokasi) == 0) {
 			$this->db->set('nama_lokasi', $nama_lokasi);
 			$this->db->set('long_lokasi', $long_lokasi);
 			$this->db->set('lat_lokasi', $lat_lokasi);
 			$this->db->set('batas_lokasi', $batas_lokasi);
+			$this->db->set('warna_lokasi', $warna_lokasi);
 			$this->db->where('id_lokasi', $id_lokasi);
 			$this->db->update('fai_lokasi');
 			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">

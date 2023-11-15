@@ -101,9 +101,9 @@ class Laporan extends CI_Controller
 
 		//header tabel || TGL
 		for ($n = 1; $n <= $d; $n++) {
-			if($this->cek_libur($ny . '-' . $nbln . '-' . $n) >= 1){
+			if ($this->cek_libur($ny . '-' . $nbln . '-' . $n) >= 1) {
 				$tgl_merah = 'color: red;font-weight: bold;';
-			}else{
+			} else {
 				$tgl_merah = '';
 			}
 			$th .= '<td style="width:30px;text-align: center;' . $tgl_merah . '">' . $n . '</td>';
@@ -118,24 +118,30 @@ class Laporan extends CI_Controller
 		}
 
 		//get nama user
-		$this->db->where('tgl_delete', null);
-		$this->db->where('role_pegawai', 1);
-		$this->db->where('id_lokasi', $id_lokasi);
-		$user = $this->db->get('fai_akun')->result();
+		$this->db->select('*');
+		$this->db->from('fai_akun');
+		$this->db->join('fai_lokasi', 'fai_akun.id_lokasi = fai_lokasi.id_lokasi');
+		$this->db->where('fai_akun.tgl_delete', null);
+		$this->db->where('fai_akun.role_pegawai', 1);
+		$this->db->where('fai_akun.id_lokasi', $id_lokasi);
+		$user = $this->db->get()->result();
 
 		foreach ($user as $u) {
 			$td = $td3 = '';
 			$m = $tk = $c = $s = $ul = $lbr = $l_shift = $l_nshift = 0;
 			$n_efektif = 0;
 
-			$this->db->where('id_user', $u->id_akun);
-			$this->db->where('pending <> 1');
-			$this->db->where('pending <> 3');
-			$this->db->where('pending <> 7');
-			$this->db->where('pending <> 8');
-			$this->db->where('pending <> 9');
-			$this->db->where('pending <> 10');
-			$absen = $this->db->get('fai_absen')->result();
+			$this->db->select('*');
+			$this->db->from('fai_absen');
+			$this->db->join('fai_lokasi', 'fai_absen.id_lokasi = fai_lokasi.id_lokasi','left');
+			$this->db->where('fai_absen.id_user', $u->id_akun);
+			$this->db->where('fai_absen.pending <> 1');
+			$this->db->where('fai_absen.pending <> 3');
+			$this->db->where('fai_absen.pending <> 7');
+			$this->db->where('fai_absen.pending <> 8');
+			$this->db->where('fai_absen.pending <> 9');
+			$this->db->where('fai_absen.pending <> 10');
+			$absen = $this->db->get()->result();
 
 			$this->db->where('id_akun', $u->id_akun);
 			$this->db->where('status_lembur', 1);
@@ -143,7 +149,7 @@ class Laporan extends CI_Controller
 
 			for ($n = 1; $n <= $d; $n++) {	// loop jumlah tgl
 				$n_data = $n_lembur = $plbr =   0;
-
+				$warna_masuk = '';
 				//mencari data absen
 				foreach ($absen as $a) {
 
@@ -154,6 +160,7 @@ class Laporan extends CI_Controller
 					if ($a->tgl_absen == $ny . '-' . $nbln . '-' . $n) {
 						$n_data += 1;
 						$p = $a->pending;
+						$warna_masuk = $a->warna_lokasi ?? 'green';
 					} else {
 						$n_data += 0;
 					}
@@ -176,7 +183,8 @@ class Laporan extends CI_Controller
 
 				if ($n_data > 0) {
 					if (($p == 0) or ($p == 2)) {
-						$td .= '<td style="background-color: green;width:30px;text-align: center;">M</td>';
+						//$td .= '<td style="background-color: green;width:30px;text-align: center;">M</td>';
+						$td .= '<td style="background-color: ' . $warna_masuk . ';width:30px;text-align: center;">M</td>';
 						$m += 1;
 						$n_efektif += 1;
 					} elseif ($p == 4) {
@@ -195,7 +203,6 @@ class Laporan extends CI_Controller
 						$td .= '<td style="background-color: orange;width:30px;text-align: center;">LS</td>';
 						$l_shift += 1;
 					}
-					
 				} elseif (date('D', strtotime($ny . '-' . $nbln . '-' . $n)) == 'Sun') {
 					$td .= '<td style="background-color: yellow;width:30px;text-align: center;">L</td>';
 					$l_nshift += 1;
@@ -209,9 +216,9 @@ class Laporan extends CI_Controller
 				}
 
 				if ($n_lembur > 0) {
-					$td3 .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">'. $plbr . '</td>';
+					$td3 .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">' . $plbr . '</td>';
 					$lbr += $plbr;
-				}else{
+				} else {
 					$td3 .= '<td style="background-color: transparent;width:30px;text-align: center;"></td>';
 				}
 			}
@@ -220,7 +227,7 @@ class Laporan extends CI_Controller
 			//$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align: center;"><b><center>' . strval($x + 1) . '</center></b></td><td style="background-color: green;">' . strval($x + 10) . '</td><td style="background-color: red;">5</td><td style="background-color: yellow;">6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 			$table .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td . '</tr>';
 			$table2 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td><td style="text-align:center;">' . $m . '</td><td style="text-align:center;">' . $c . '</td><td style="text-align:center;">' . $s . '</td><td style="text-align:center;">' . $ul . '</td><td style="text-align:center;">' . $tk . '</td><td style="text-align:center;">' . $l_shift . '</td><td style="text-align:center;">' . $l_nshift . '</td><td style="text-align:center;">' . $n_efektif . '</td><td style="text-align:center;background-color: greenyellow;">' . ($m + $s + $c + $l_shift + $l_nshift) . '</td><td style="text-align:center;">' . $lbr . '</td><td style="text-align:center;background-color: red;">' . ($ul + $tk) . '</td></tr>';
-			$table3 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td3. '</tr>';
+			$table3 .= '<tr><td style="text-align:center;">' . $x . '</td><td style="text-align:center;">' . $u->nama_user . '</td>' . $td3 . '</tr>';
 			$x += 1;
 		}
 
@@ -234,7 +241,24 @@ class Laporan extends CI_Controller
 		$table .= '<td style="background-color: #c97d8c;width:30px;text-align: center;">UL</td><td>:</td><td>Unpaid Leave</td><td>&emsp;</td>';
 		$table .= '<td style="background-color: red;width:30px;text-align: center;">TK</td><td>:</td><td>Tidak Masuk Kerja</td><td>&emsp;</td>';
 		$table .= '</tr></table><br><br>';
-		$table = $table . $table2 . '</table><br><br>' . $table3 . '</table></center>';
+
+		$table_info = '<table border="0"><tr><td colspan="2"><b>Informasi lokasi tempat kerja berdasarkan warna</b></td></tr>';
+
+		$this->db->where('tgl_delete', null);
+		$info_lokasi = $this->db->get('fai_lokasi')->result();
+
+		foreach($info_lokasi as $i){
+			if($i->nama_lokasi == 'Office'){
+				$lokasi = 'Office / default Masuk';
+			}else{
+				$lokasi = $i->nama_lokasi;
+			}
+			$table_info .= '<tr><td style="background-color:' . $i->warna_lokasi . ';width: 20px;"></td>&emsp;<td>&emsp;' . $lokasi . '</td></tr>';
+		}
+
+		$table_info .= '</table>';
+
+		$table = $table . $table2 . '</table><br><br>' . $table3 . '</table><br><br>' . $table_info . '</center>';
 		echo $table;
 	}
 

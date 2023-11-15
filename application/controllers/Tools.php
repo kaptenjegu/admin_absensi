@@ -19,6 +19,9 @@ class Tools extends CI_Controller
         $this->db->where('tgl_delete', null);
         $data['akun'] = $this->db->get('fai_akun')->result();
 
+        $this->db->where('tgl_delete', null);
+        $data['lokasi'] = $this->db->get('fai_lokasi')->result();
+
         $this->load->view('header', $data);
         $this->load->view('tools', $data);
         $this->load->view('footer');
@@ -32,10 +35,11 @@ class Tools extends CI_Controller
             $id_metode = $this->input->post('id_metode');   //1 - auto absen , 2 - auto cuti
             $id_akun = $this->input->post('id_akun');
             $tgl_range = $this->input->post('tgl_range');
+            $id_lokasi = $this->input->post('id_lokasi');
 
             switch ($id_metode) {
                 case 1:
-                    $query = $this->auto_absen($tgl_range, $id_akun);
+                    $query = $this->auto_absen($tgl_range, $id_akun, $id_lokasi);
                     $this->db->query($query);
                     break;
                 case 2:
@@ -43,7 +47,7 @@ class Tools extends CI_Controller
                     $this->db->query($query);
                     break;
                 case 3:
-                    $query = $this->auto_absen2($tgl_range, $id_akun);
+                    $query = $this->auto_absen2($tgl_range, $id_akun, $id_lokasi);
                     $this->db->query($query);
                     break;
                 case 4:
@@ -68,12 +72,12 @@ class Tools extends CI_Controller
     }
 
     //generate query, !!! per bulan, jika ganti bulan, maka jalankan fungsi lagi secara manual !!!
-    private function auto_absen($tgl, $id_akun)
+    private function auto_absen($tgl, $id_akun, $id_lokasi)
     {
         $tgl = explode(' - ', $tgl);
         $t1 = explode('-', $tgl[0]);
         $t2 = explode('-', $tgl[1]);
-        $q = "INSERT INTO fai_absen(id_absen,id_user,tgl_absen,absen_masuk,absen_pulang,pending,catatan_pending)
+        $q = "INSERT INTO fai_absen(id_absen,id_user,tgl_absen,absen_masuk,absen_pulang,pending,catatan_pending, id_lokasi)
                             VALUES ";
         for ($n = $t1[2]; $n <= $t2[2]; $n++) {
             if (strlen($n) == 1) {
@@ -84,9 +88,9 @@ class Tools extends CI_Controller
 
             if ((date('D', strtotime($t1[0] . '-' . $t1[1] . '-' . $n1)) !== 'Sun') and ($this->cek_tgl($t1[0] . "-" . $t1[1] . "-" . $n1, $id_akun) == 0) and ($this->cek_libur($t1[0] . "-" . $t1[1] . "-" . $n1) == 0)) {
                 if ($n == $t2[2]) { //generate query
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "')";
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "', '" . $id_lokasi . "')";
                 } else {
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "'),";
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "', '" . $id_lokasi . "'),";
                 }
             }
         }
@@ -95,12 +99,12 @@ class Tools extends CI_Controller
     }
 
     //generate query auto absen tanpa libur, !!! per bulan, jika ganti bulan, maka jalankan fungsi lagi secara manual !!!
-    private function auto_absen2($tgl, $id_akun)
+    private function auto_absen2($tgl, $id_akun, $id_lokasi)
     {
         $tgl = explode(' - ', $tgl);
         $t1 = explode('-', $tgl[0]);
         $t2 = explode('-', $tgl[1]);
-        $q = "INSERT INTO fai_absen(id_absen,id_user,tgl_absen,absen_masuk,absen_pulang,pending,catatan_pending)
+        $q = "INSERT INTO fai_absen(id_absen,id_user,tgl_absen,absen_masuk,absen_pulang,pending,catatan_pending, id_lokasi)
                             VALUES ";
         for ($n = $t1[2]; $n <= $t2[2]; $n++) {
             if (strlen($n) == 1) {
@@ -111,9 +115,9 @@ class Tools extends CI_Controller
 
             if ($this->cek_tgl($t1[0] . "-" . $t1[1] . "-" . $n1, $id_akun) == 0) {
                 if ($n == $t2[2]) { //generate query
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "')";
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "', '" . $id_lokasi . "')";
                 } else {
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "'),";
+                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 0, 'auto absen - " . $_SESSION['nama_user'] . "', '" . $id_lokasi . "'),";
                 }
             }
         }

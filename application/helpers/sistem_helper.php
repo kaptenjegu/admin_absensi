@@ -274,3 +274,21 @@ function notif_pjbs($id, $opsi)
 	);
 	$ci->db->insert('notif_pjbs', $data);
 }
+
+function generate_warna()
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$length = 6;
+
+	do {
+		$rand = substr(str_shuffle(str_repeat($x = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
+		$rand = '#' .  $rand;
+
+		$ci->db->where('warna_lokasi', $rand);
+		$ci->db->where('tgl_delete', null);
+		$n = $ci->db->get('fai_lokasi')->num_rows();
+	}while($n >= 1);
+
+	return $rand;
+}
