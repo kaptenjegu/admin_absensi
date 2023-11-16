@@ -271,6 +271,28 @@
 
             });
         });
+
+        function get_data(id_lembur, id_akun, bulan) {
+            $.ajax({
+                url: "<?= base_url() ?>Riwayat/get_data_lembur/" + id_lembur + "/" + id_akun + "/" + bulan,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    document.getElementById('id_lembur_edit').value = data['id_lembur'];
+                    document.getElementById('id_akun_edit').value = data['id_akun'];                    
+                    document.getElementById('tgl_lembur_edit').value = data['tgl_lembur'];
+                    document.getElementById('mulai_lembur_edit').value = data['mulai_lembur'];
+                    document.getElementById('selesai_lembur_edit').value = data['selesai_lembur'];
+                    document.getElementById('point_lembur_edit').value = data['point_lembur'];
+                    $('#editForm').modal('show');
+                    console.log(data);
+                },
+                error: function(data) {
+                    alert('error')
+                    console.log(data);
+                }
+            });
+        }
     </script>
 <?php } ?>
 

@@ -81,7 +81,7 @@ class Riwayat extends CI_Controller
 			$selesai_absen = $this->input->post('selesai_absen');
 
 			if ($tipe_absen == 11) {	//libur shift
-				if($this->cek_dobel($tgl_absen,$id_akun,$tipe_absen) == 0){
+				if ($this->cek_dobel($tgl_absen, $id_akun, $tipe_absen) == 0) {
 					$data = array(
 						'id_absen' => randid(),
 						'id_user' => $id_akun,
@@ -95,7 +95,7 @@ class Riwayat extends CI_Controller
 
 					$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 						<center><b>Data Libur Shift telah ditambahkan</b></center></div>');
-				}else{
+				} else {
 					$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Error, data sudah ada di database.</b></center></div>');
 				}
@@ -149,10 +149,10 @@ class Riwayat extends CI_Controller
 				}
 
 				if ($n == $t2[2]) {
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti')";
-                } else {
-                    $q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti'),";
-                }
+					$q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti')";
+				} else {
+					$q .= "('" . randid() . "','$id_akun', '" . $t1[0] . "-" . $t1[1] . "-" . $n1 . "', '07:30', '18:00', 4, 'auto cuti'),";
+				}
 			}
 
 			$this->db->query($q);
@@ -172,7 +172,7 @@ class Riwayat extends CI_Controller
 	{
 		try {
 			$this->db->trans_start();
-			
+
 			$id_akun = $this->db->escape_str($this->uri->segment(4));
 			$bulan = $this->uri->segment(5);
 			$id_absen = $this->db->escape_str($this->uri->segment(3));
@@ -195,7 +195,7 @@ class Riwayat extends CI_Controller
 	{
 		try {
 			$this->db->trans_start();
-			
+
 			$id_akun = $this->db->escape_str($this->uri->segment(4));
 			$bulan = $this->uri->segment(5);
 			$id_lembur = $this->db->escape_str($this->uri->segment(3));
@@ -214,12 +214,54 @@ class Riwayat extends CI_Controller
 		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
 	}
 
-	private function cek_dobel($tgl, $id_akun,$pending)
-    {
-        $this->db->where('tgl_absen', $tgl);
-        $this->db->where('id_user', $id_akun);
-        $this->db->where('pending', $pending);
-        $n = $this->db->get('fai_absen')->num_rows();
-        return $n;
-    }
+	private function cek_dobel($tgl, $id_akun, $pending)
+	{
+		$this->db->where('tgl_absen', $tgl);
+		$this->db->where('id_user', $id_akun);
+		$this->db->where('pending', $pending);
+		$n = $this->db->get('fai_absen')->num_rows();
+		return $n;
+	}
+
+	public function get_data_lembur()
+	{
+		$id_akun = $this->db->escape_str($this->uri->segment(4));
+		$bulan = $this->uri->segment(5);
+		$id_lembur = $this->db->escape_str($this->uri->segment(3));
+		
+		$this->db->where('id_lembur', $id_lembur);
+		$data = $this->db->get('fai_lembur')->first_row();
+		echo json_encode($data);
+	}
+
+	public function edit_lembur()
+	{
+		try {
+			$this->db->trans_start();
+
+			$id_akun = $this->db->escape_str($this->input->post('id_akun'));
+			$bulan = $this->input->post('bulan');
+			$id_lembur = $this->db->escape_str($this->input->post('id_lembur'));
+			$tgl_lembur = $this->input->post('tgl_lembur');
+			$mulai_lembur = $this->input->post('mulai_lembur');
+			$selesai_lembur = $this->input->post('selesai_lembur');
+			$point_lembur = $this->input->post('point_lembur');
+
+			$this->db->set('tgl_lembur', $tgl_lembur);
+			$this->db->set('mulai_lembur', $mulai_lembur);
+			$this->db->set('selesai_lembur', $selesai_lembur);
+			$this->db->set('point_lembur', $point_lembur);
+			$this->db->where('id_lembur', $id_lembur);
+			$this->db->update('fai_lembur');
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Lembur berhasil diedit</b></center></div>');
+
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Riwayat/data_rilis/?id_akun=' . $id_akun . '&bulan=' . $bulan);
+	}
 }

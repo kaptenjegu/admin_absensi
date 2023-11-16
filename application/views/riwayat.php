@@ -142,26 +142,26 @@
                 </form>
             </div>
         </div>
-        
-        <?php if (isset($_GET['bulan'])) { ?>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Tambah Data Cuti
-            </div>
-            <div class="panel-body">
-                <form role="form" action="<?= base_url('Riwayat/tambah_cuti/') ?>" method="POST">
-                    <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
-                    <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
-                    
-                    <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="text" class="form-control" name="tgl_range" required>
-                    </div>
 
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Tambahkan</button>
-                </form>
+        <?php if (isset($_GET['bulan'])) { ?>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Tambah Data Cuti
+                </div>
+                <div class="panel-body">
+                    <form role="form" action="<?= base_url('Riwayat/tambah_cuti/') ?>" method="POST">
+                        <input type="hidden" name="id_akun" value="<?= $_GET['id_akun'] ?>">
+                        <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
+
+                        <div class="form-group">
+                            <label>Tanggal</label>
+                            <input type="text" class="form-control" name="tgl_range" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Tambahkan</button>
+                    </form>
+                </div>
             </div>
-        </div>
         <?php } ?>
 
         <div class="panel panel-default">
@@ -265,7 +265,10 @@
                                     <td>' . $v->mulai_lembur . ' - ' . $v->selesai_lembur . '</td>
                                     <td>' . $v->point_lembur . '</td>
                                     <td>' . $v->keterangan . '</td>
-                                    <td><a href="' . base_url('Riwayat/delete_lembur/' . $v->id_lembur . '/' . $_GET['id_akun'] . '/' . $_GET['bulan']) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus lembur tanggal ' . date('d-m-Y', strtotime($v->tgl_lembur)) . ' ?\')"><i class="fa fa-trash-o"></i> Hapus</a></td>
+                                    <td>
+                                        <button onclick="get_data(\'' . $v->id_lembur . '/' . $_GET['id_akun'] . '/' . $_GET['bulan'] . '\')" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</button>&emsp;
+                                        <a href="' . base_url('Riwayat/delete_lembur/' . $v->id_lembur . '/' . $_GET['id_akun'] . '/' . $_GET['bulan']) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus lembur tanggal ' . date('d-m-Y', strtotime($v->tgl_lembur)) . ' ?\')"><i class="fa fa-trash-o"></i> Hapus</a>
+                                    </td>
                                 </tr>';
                                 $no += 1;
                             }
@@ -275,11 +278,48 @@
                 </div>
             </div>
         </div>
-
         <br>
         <br>
-
-
-
     </div>
 </div>
+
+<!--  EDIT-->
+<div class="modal fade" id="editForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Edit Lembur</h4>
+            </div>
+            <form method="POST" action="<?= base_url('Riwayat/edit_lembur/') ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id_akun" id="id_akun_edit">
+                    <input type="hidden" name="bulan" value="<?= $_GET['bulan'] ?>">
+                    <input type="hidden" name="id_lembur" id="id_lembur_edit">
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="text" class="form-control" name="tgl_lembur" id="tgl_lembur_edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Mulai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                        <input type="text" class="form-control" name="mulai_lembur" id="mulai_lembur_edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Selesai Lembur (Jika libur shift, silakan diabaikan)</b></label>
+                        <input type="text" class="form-control" name="selesai_lembur" id="selesai_lembur_edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Point Lembur (Jika libur shift, silakan diisi 0)</label>
+                        <input type="number" class="form-control" name="point_lembur" id="point_lembur_edit" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT -->
