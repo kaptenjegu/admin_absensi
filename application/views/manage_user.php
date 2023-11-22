@@ -13,15 +13,15 @@
                 <?= $judul ?>
             </div>
             <div class="panel-body">
-                <form role="form" method="POST" action="<?= $action ?>">
+                <form role="form" method="POST" action="<?= $action ?>" enctype="multipart/form-data">
                     <input type="hidden" name="id_akun" value="<?php if (isset($user)) {
                                                                     echo $user->id_akun;
                                                                 } ?>">
                     <div class="form-group">
                         <label>Nama</label>
                         <input type="text" class="form-control" name="nama_user" maxlength="20" <?php if (isset($user)) {
-                                                                                        echo 'value="' . $user->nama_user . '"';
-                                                                                    } ?> required>
+                                                                                                    echo 'value="' . $user->nama_user . '"';
+                                                                                                } ?> required>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
@@ -106,6 +106,55 @@
                                                 } ?>>Shift Berubah-ubah / Jam Kerja Berubah</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label>Menu</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_kas" id="menu_kas" <?php if (isset($user)) {if(cek_permit($user->id_akun,'kas')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_kas">
+                                Kas
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_kas_tipe" id="menu_kas_tipe" <?php if (isset($user)) {if(cek_permit($user->id_akun,'kas_tipe')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_kas_tipe">
+                                Kas Tipe
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_aset" id="menu_aset" <?php if (isset($user)) {if(cek_permit($user->id_akun,'aset')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_aset">
+                                Aset
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_aset_pinjam" id="menu_aset_pinjam" <?php if (isset($user)) {if(cek_permit($user->id_akun,'aset_pinjam')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_aset_pinjam">
+                                Aset Pinjam
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_aset_kembali" id="menu_aset_kembali"<?php if (isset($user)) {if(cek_permit($user->id_akun,'aset_kembali')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_aset_kembali">
+                                Aset Kembali
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_monitoring_bayar" id="menu_monitoring_bayar" <?php if (isset($user)) {if(cek_permit($user->id_akun,'monitoring_bayar')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_monitoring_bayar">
+                                Monitoring Bayar
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_monitoring_riwayat_bayar" id="menu_monitoring_riwayat_bayar" <?php if (isset($user)) {if(cek_permit($user->id_akun,'monitoring_riwayat_bayar')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_monitoring_riwayat_bayar">
+                                Riwayat Bayar
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <br>
                     <button type="submit" class="btn btn-info">Simpan</button>&emsp;
                     <a href="<?= base_url('User') ?>" class="btn btn-default">Kembali</a>&emsp;&emsp;&emsp;
                     <?php if (isset($user)) { ?>

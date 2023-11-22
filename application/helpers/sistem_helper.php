@@ -288,7 +288,20 @@ function generate_warna()
 		$ci->db->where('warna_lokasi', $rand);
 		$ci->db->where('tgl_delete', null);
 		$n = $ci->db->get('fai_lokasi')->num_rows();
-	}while($n >= 1);
+	} while ($n >= 1);
 
 	return $rand;
+}
+
+function cek_permit($id_user, $menu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	
+	$ci->db->where('id_user', $id_user);
+	$ci->db->where('id_menu', $menu);
+	$ci->db->where('tgl_delete', null);
+	$n = $ci->db->get('fma_permission')->num_rows();
+
+	return $n;
 }

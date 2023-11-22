@@ -92,6 +92,35 @@ class User extends CI_Controller
 			$id_user = randid();
 
 			if ($this->cek_nama($nama_user) == 0) {
+				//echo $this->input->post('menu_kas');exit();
+				if($this->input->post('menu_kas')){
+					$this->tambah_permission($id_user, 'kas');
+				}
+
+				if($this->input->post('menu_kas_tipe')){
+					$this->tambah_permission($id_user, 'kas_tipe');
+				}
+
+				if($this->input->post('menu_aset_pinjam')){
+					$this->tambah_permission($id_user, 'aset_pinjam');
+				}
+
+				if($this->input->post('menu_aset')){
+					$this->tambah_permission($id_user, 'aset');
+				}
+
+				if($this->input->post('menu_aset_kembali')){
+					$this->tambah_permission($id_user, 'aset_kembali');
+				}
+
+				if($this->input->post('menu_monitoring_bayar')){
+					$this->tambah_permission($id_user, 'monitoring_bayar');
+				}
+
+				if($this->input->post('menu_monitoring_riwayat_bayar')){
+					$this->tambah_permission($id_user, 'monitoring_riwayat_bayar');
+				}
+
 				$data = array(
 					'id_akun' => $id_user,
 					'nama_user' => strtoupper($nama_user),
@@ -122,12 +151,54 @@ class User extends CI_Controller
 		redirect('User');
 	}
 
+	private function tambah_permission($id_akun, $menu)
+	{
+		$data = array(
+			'id_permission' => '',
+			'id_user' => $id_akun,
+			'id_menu' => $menu
+		);
+		$this->db->insert('fma_permission', $data);
+	}
+
 	public function edit_simpan()
 	{
 		try {
 			$this->db->trans_start();
 			$id_akun = $this->db->escape_str($this->input->post('id_akun'));
 			$nama_user = $this->input->post('nama_user');
+			$id_user = $id_akun;
+
+			$this->db->where('id_user', $id_akun);
+			$this->db->delete('fma_permission');
+
+			if($this->input->post('menu_kas')){
+				$this->tambah_permission($id_user, 'kas');
+			}
+
+			if($this->input->post('menu_kas_tipe')){
+				$this->tambah_permission($id_user, 'kas_tipe');
+			}
+
+			if($this->input->post('menu_aset_pinjam')){
+				$this->tambah_permission($id_user, 'aset_pinjam');
+			}
+
+			if($this->input->post('menu_aset')){
+				$this->tambah_permission($id_user, 'aset');
+			}
+
+			if($this->input->post('menu_aset_kembali')){
+				$this->tambah_permission($id_user, 'aset_kembali');
+			}
+
+			if($this->input->post('menu_monitoring_bayar')){
+				$this->tambah_permission($id_user, 'monitoring_bayar');
+			}
+
+			if($this->input->post('menu_monitoring_riwayat_bayar')){
+				$this->tambah_permission($id_user, 'monitoring_riwayat_bayar');
+			}
 
 			//if ($this->cek_nama($nama_user) == 0) {
 			$this->db->set('nama_user', $nama_user);
