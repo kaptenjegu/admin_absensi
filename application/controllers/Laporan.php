@@ -216,7 +216,7 @@ class Laporan extends CI_Controller
 				}
 
 				if ($n_lembur > 0) {
-					$td3 .= '<td style="background-color: #0a8ef3;width:30px;text-align: center;">' . $plbr . '</td>';
+					$td3 .= '<td style="background-color: transparent;width:30px;text-align: center;">' . $plbr . '</td>';
 					$lbr += $plbr;
 				} else {
 					$td3 .= '<td style="background-color: transparent;width:30px;text-align: center;"></td>';
