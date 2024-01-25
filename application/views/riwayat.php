@@ -189,15 +189,15 @@
                         </div>
                         <div class="form-group">
                             <label><b>Mulai Lembur (Jika libur shift, silakan diabaikan)</b></label>
-                            <input type="text" class="form-control" name="mulai_absen" id="mulai_absen" required>
+                            <input type="text" class="form-control" name="mulai_absen" id="mulai_absen" onchange="get_point_lembur()" required>
                         </div>
                         <div class="form-group">
                             <label><b>Selesai Lembur (Jika libur shift, silakan diabaikan)</b></label>
-                            <input type="text" class="form-control" name="selesai_absen" id="selesai_absen" required>
+                            <input type="text" class="form-control" name="selesai_absen" id="selesai_absen" onchange="get_point_lembur()" required>
                         </div>
                         <div class="form-group">
                             <label>Point Lembur (Jika libur shift, silakan diisi 0)</label>
-                            <input type="number" class="form-control" name="point_lembur" step="0.01" required>
+                            <input type="number" class="form-control" name="point_lembur" id="point_lembur" step="0.001" value="0" required>
                         </div>
                         <button type="submit" class="btn btn-info"><i class="fa fa-plus"></i> Tambahkan</button>
                     </form>

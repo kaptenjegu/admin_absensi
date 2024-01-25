@@ -293,6 +293,29 @@
                 }
             });
         }
+
+        function get_point_lembur(){
+            let mulai_absen = document.getElementById('mulai_absen').value;
+            let selesai_absen = document.getElementById('selesai_absen').value;
+            let x = 0.125;
+            let a = mulai_absen.split(":");
+            let b = selesai_absen.split(":");
+            
+            let awal = Number(a[0]);
+            let akhir = Number(b[0]);
+
+            let hasil;
+
+            if(awal > akhir){
+                hasil = (24 - awal) + akhir;
+            }else if(awal < akhir){
+                hasil = akhir - awal;
+            }else{
+                hasil = 0;
+            }
+
+            document.getElementById('point_lembur').value = hasil * x;
+        }
     </script>
 <?php } ?>
 
