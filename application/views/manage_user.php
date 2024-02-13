@@ -151,6 +151,12 @@
                                 Riwayat Bayar
                             </label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="menu_tender" id="menu_monitoring_riwayat_bayar" <?php if (isset($user)) {if(cek_permit($user->id_akun,'tender')){echo 'checked';}} ?>>
+                            <label class="form-check-label" for="menu_tender">
+                                Tender
+                            </label>
+                        </div>
                     </div>
                     
                     <br>

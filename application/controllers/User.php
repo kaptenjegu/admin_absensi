@@ -121,6 +121,11 @@ class User extends CI_Controller
 					$this->tambah_permission($id_user, 'monitoring_riwayat_bayar');
 				}
 
+				if($this->input->post('tender')){
+					$this->tambah_permission($id_user, 'tender');
+					$this->tambah_permission($id_user, 'Riwayat_tender');
+				}
+
 				$data = array(
 					'id_akun' => $id_user,
 					'nama_user' => strtoupper($nama_user),
@@ -198,6 +203,11 @@ class User extends CI_Controller
 
 			if($this->input->post('menu_monitoring_riwayat_bayar')){
 				$this->tambah_permission($id_user, 'monitoring_riwayat_bayar');
+			}
+
+			if($this->input->post('menu_tender')){
+				$this->tambah_permission($id_user, 'tender');
+				$this->tambah_permission($id_user, 'Riwayat_tender');
 			}
 
 			//if ($this->cek_nama($nama_user) == 0) {
