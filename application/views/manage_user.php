@@ -109,7 +109,7 @@
 
                     <div class="form-group">
                         <label>Menu</label>
-                        <div class="form-check">
+                        <!--div class="form-check">
                             <input class="form-check-input" type="checkbox"  name="menu_kas" id="menu_kas" <?php if (isset($user)) {if(cek_permit($user->id_akun,'kas')){echo 'checked';}} ?>>
                             <label class="form-check-label" for="menu_kas">
                                 Kas
@@ -152,11 +152,22 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox"  name="menu_tender" id="menu_monitoring_riwayat_bayar" <?php if (isset($user)) {if(cek_permit($user->id_akun,'tender')){echo 'checked';}} ?>>
+                            <input class="form-check-input" onclick="cek('menu_tender','<?= $user->id_akun ?>')"  type="checkbox"  name="menu_tender" id="menu_tender" <?php //if (isset($user)) {if(cek_permit($user->id_akun,'tender')){echo 'checked';}} ?>>
                             <label class="form-check-label" for="menu_tender">
                                 Tender
                             </label>
-                        </div>
+                        </div-->
+                        <?php
+                        foreach($role_menu as $rm){
+                            if (isset($user)) {if(cek_permit($user->id_akun,$rm->nama_menu)){$ckd = 'checked';}else{$ckd = '';}}
+                            echo '<div class="form-check">
+                                    <input class="form-check-input" onclick="cek(\'' . $rm->nama_menu . '\',\'' . $user->id_akun . '\')" type="checkbox" id="' . $rm->nama_menu . '" '. $ckd .'>
+                                    <label class="form-check-label" for="' . $rm->nama_menu . '">
+                                        ' . $rm->deskripsi . '
+                                    </label>
+                                </div>';
+                        }
+                        ?>
                     </div>
                     
                     <br>

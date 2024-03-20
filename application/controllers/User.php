@@ -65,6 +65,10 @@ class User extends CI_Controller
 		$this->db->where('tgl_delete', null);
 		$user = $this->db->get('fai_akun');
 
+		//permission
+		$this->db->where('tgl_delete', null);
+		$data['role_menu'] = $this->db->get('conf_menu')->result();
+
 		if ($user->num_rows() == 1) {
 			$data['user'] = $user->first_row();
 
@@ -177,7 +181,7 @@ class User extends CI_Controller
 			$this->db->where('id_user', $id_akun);
 			$this->db->delete('fma_permission');
 
-			if($this->input->post('menu_kas')){
+			/*if($this->input->post('menu_kas')){
 				$this->tambah_permission($id_user, 'kas');
 			}
 
@@ -208,7 +212,7 @@ class User extends CI_Controller
 			if($this->input->post('menu_tender')){
 				$this->tambah_permission($id_user, 'tender');
 				$this->tambah_permission($id_user, 'Riwayat_tender');
-			}
+			}*/
 
 			//if ($this->cek_nama($nama_user) == 0) {
 			$this->db->set('nama_user', $nama_user);
@@ -282,5 +286,54 @@ class User extends CI_Controller
 				<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
 		}
 		redirect('User');
+	}
+
+	public function add_permission()
+	{
+		try {
+			$this->db->trans_start();
+			$id_akun = $this->db->escape_str($this->uri->segment(3));
+			$menu = $this->db->escape_str($this->uri->segment(4));
+
+			$this->db->where('id_user', $id_akun);
+			$this->db->where('id_menu', $menu);
+			$this->db->where('tgl_delete', null);
+			$n = $this->db->get('fma_permission')->num_rows();
+
+			if($n == 0){
+				$data = array(
+					'id_permission' => '',
+					'id_user' => $id_akun,
+					'id_menu' => $menu
+				);
+				$this->db->insert('fma_permission', $data);
+			}
+
+			$this->db->trans_complete();
+			//echo $id_akun . ' - ' . $menu;
+			echo 'Tambah Permission Berhasil';
+		} catch (\Throwable $e) {
+			echo 'Tambah Permission Gagal - ' . $e->getMessage();
+		}
+	}
+
+	public function delete_permission()
+	{
+		try {
+			$this->db->trans_start();
+			$id_akun = $this->db->escape_str($this->uri->segment(3));
+			$menu = $this->uri->segment(4);
+			
+			$this->db->set('tgl_delete', date('Y-m-d H:i:s'));
+			$this->db->where('id_user', $id_akun);
+			$this->db->where('id_menu', $menu);
+			$this->db->update('fma_permission');
+
+			$this->db->trans_complete();
+			echo 'Hapus Permission Berhasil';
+			//echo $id_akun . ' - ' . $menu;
+		} catch (\Throwable $e) {
+			echo 'Hapus Permission Gagal - ' . $e->getMessage();
+		}
 	}
 }

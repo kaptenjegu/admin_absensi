@@ -373,6 +373,47 @@
     </script>
 <?php } ?>
 
+<?php if ($page == "User") { ?>
+    <script type="text/javascript">
+        function cek(menu, id_user){
+            //console.log(document.getElementById(menu).checked);
+            if(document.getElementById(menu).checked == true){
+                console.log('add - ' + id_user + ' on ' + menu);
+                change_permission(menu, 1, id_user);
+            }else{
+                console.log('delete - ' + id_user + ' on ' + menu);
+                change_permission(menu, 0, id_user);
+            }
+        }
+
+        function change_permission(menu, opsi, id_user){
+            var link;
+            if(opsi == 1){
+                //add
+                link = "<?= base_url() ?>User/add_permission/" + id_user + "/" + menu;
+            }else{
+                //delete
+                link = "<?= base_url() ?>User/delete_permission/" + id_user + "/" + menu;
+            }
+
+            $.ajax({
+                url: link,
+                type: "GET",
+                dataType: "html",
+                success: function(data) {
+                    //document.getElementById('id_libur').value = data['id_libur'];
+                    alert(data);
+                    console.log(data);
+                },
+                error: function(data) {
+                    alert('error')
+                    console.log(data);
+                }
+            });
+        }
+    </script>
+<?php } ?>
+
 </body>
 
 </html>
